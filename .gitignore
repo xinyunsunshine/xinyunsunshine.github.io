@@ -1,0 +1,6 @@
+# macOS
+.DS_Store
+
+# Source materials (kept locally, not published)
+*.key
+*.zip
