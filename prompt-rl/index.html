@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TODO: edit the page title -->
+    <title>Prompt Optimization for Real-World VLA Policies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --maxw: 1000px;
+            --accent: #2a6df4;
+            --fail: #c0392b;
+            --ok: #1e8e3e;
+            --ink: #1a1a1a;
+            --muted: #666;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans Pro', -apple-system, Helvetica, Arial, sans-serif;
+            color: var(--ink); margin: 0; line-height: 1.6; background: #fff;
+        }
+        .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ---------- header ---------- */
+        header.hero { text-align: center; padding: 56px 0 8px; }
+        h1.title { font-size: 2.2rem; font-weight: 900; line-height: 1.2; margin: 0 0 18px; }
+        .authors { font-size: 1.15rem; margin: 6px 0; }
+        .authors a { color: var(--ink); font-weight: 600; }
+        .affil { color: var(--muted); margin: 4px 0 18px; }
+        .links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 18px 0 8px; }
+        .links a {
+            background: var(--ink); color: #fff; padding: 9px 18px; border-radius: 999px;
+            font-weight: 600; font-size: .95rem;
+        }
+        .links a:hover { background: var(--accent); text-decoration: none; }
+
+        /* ---------- sections ---------- */
+        section { padding: 30px 0; }
+        h2 { font-size: 1.6rem; font-weight: 700; text-align: center; margin: 0 0 18px; }
+        .lead { font-size: 1.05rem; max-width: 820px; margin: 0 auto; }
+        .divider { border-top: 1px solid #eee; margin: 8px auto; max-width: var(--maxw); }
+
+        /* ---------- result cards ---------- */
+        .task { margin: 34px 0; }
+        .task h3 { font-size: 1.25rem; margin: 0 0 4px; }
+        .task .prompts { color: var(--muted); margin: 0 0 16px; font-size: .98rem; }
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .cell { border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; }
+        .cell .cap { padding: 8px 12px; font-weight: 600; font-size: .95rem; display: flex; justify-content: space-between; }
+        .cell.fail .cap { background: #fdecea; color: var(--fail); }
+        .cell.ok   .cap { background: #e8f5ec; color: var(--ok); }
+        .cell video, .cell img { width: 100%; display: block; background: #000; }
+        .strip { margin-top: 14px; }
+        .strip img { width: 100%; border-radius: 10px; border: 1px solid #eaeaea; }
+        .strip .lbl { font-size: .85rem; color: var(--muted); margin: 6px 2px 0; }
+        .pill { font-variant-numeric: tabular-nums; }
+
+        pre.bib {
+            background: #f6f8fa; border: 1px solid #eaeaea; border-radius: 10px;
+            padding: 16px; overflow-x: auto; font-size: .85rem; line-height: 1.45;
+        }
+        footer { text-align: center; color: var(--muted); padding: 40px 0; font-size: .9rem; }
+        @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } h1.title { font-size: 1.6rem; } }
+    </style>
+</head>
+
+<body>
+    <header class="hero">
+        <div class="wrap">
+            <!-- TODO: title -->
+            <h1 class="title">Optimizing Language Prompts for Real-World<br>Vision-Language-Action Policies</h1>
+            <!-- TODO: authors + links -->
+            <div class="authors">
+                <a href="https://xinyunsunshine.github.io">Xinyun (Sunshine) Jiang</a>,
+                <a href="#">Coauthor Two</a>,
+                <a href="#">Coauthor Three</a>
+            </div>
+            <div class="affil">MIT CSAIL &nbsp;·&nbsp; Improbable AI Lab</div>
+            <div class="links">
+                <a href="#">📄 Paper</a>
+                <a href="#">arXiv</a>
+                <a href="https://github.com/xinyunsunshine">💻 Code</a>
+                <a href="#results">▶ Videos</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- ---------- abstract ---------- -->
+    <section id="abstract">
+        <div class="wrap">
+            <h2>Abstract</h2>
+            <p class="lead">
+                <!-- TODO: replace with your real abstract -->
+                Vision-language-action (VLA) policies are surprisingly sensitive to the exact wording of the
+                task prompt. We present a method that automatically <b>optimizes the natural-language prompt</b>
+                given to a fixed VLA policy, searching over candidate rephrasings and scoring them with real-robot
+                rollouts. Without changing the policy weights, prompt optimization substantially raises task
+                success rates: a vague instruction that almost always fails is turned into a precise one the
+                policy can reliably execute. We demonstrate the approach on real Franka manipulation tasks.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- key results ---------- -->
+    <section id="results">
+        <div class="wrap">
+            <h2>The prompt matters: original vs. optimized</h2>
+            <p class="lead" style="text-align:center;">
+                Same policy, same scene — only the wording of the instruction changes. The original prompt
+                fails; the optimized prompt succeeds.
+            </p>
+
+            <!-- Task 1 -->
+            <div class="task">
+                <h3>Task 1 — Put the green container in the bowl</h3>
+                <p class="prompts">
+                    Original: <i>“put the green container in the bowl”</i> &nbsp;→&nbsp;
+                    Optimized: <i>“put the green container in the <b>green</b> bowl”</i>
+                </p>
+                <div class="grid2">
+                    <div class="cell fail">
+                        <div class="cap"><span>Original prompt</span><span class="pill">success rate ≈ 4%</span></div>
+                        <video src="assets/greenbowl_FAIL_original.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                    <div class="cell ok">
+                        <div class="cap"><span>Optimized prompt (ours)</span><span class="pill">success rate ≈ 35%</span></div>
+                        <video src="assets/greenbowl_SUCCESS_ours.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                </div>
+                <div class="strip">
+                    <img src="assets/greenbowl_FAIL_original.png" alt="green bowl failure rollout frames">
+                    <div class="lbl">Original prompt fails — the container is never placed in the bowl.</div>
+                    <img src="assets/greenbowl_SUCCESS_ours.png" alt="green bowl success rollout frames" style="margin-top:10px;">
+                    <div class="lbl">Optimized prompt succeeds — the container is picked and placed in the bowl.</div>
+                </div>
+            </div>
+
+            <!-- Task 2 -->
+            <div class="task">
+                <h3>Task 2 — Open the top drawer and put the tape inside</h3>
+                <p class="prompts">
+                    Original: <i>“open the top drawer and put the tape <b>above</b> inside”</i> &nbsp;→&nbsp;
+                    Optimized: <i>“open the top drawer and put the tape inside”</i>
+                </p>
+                <div class="grid2">
+                    <div class="cell fail">
+                        <div class="cap"><span>Original prompt</span><span class="pill">success rate ≈ 15%</span></div>
+                        <video src="assets/tape_FAIL_original.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                    <div class="cell ok">
+                        <div class="cap"><span>Optimized prompt (ours)</span><span class="pill">success rate ≈ 45%</span></div>
+                        <video src="assets/tape_SUCCESS_ours.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                </div>
+                <div class="strip">
+                    <img src="assets/tape_FAIL_original.png" alt="tape drawer failure rollout frames">
+                    <div class="lbl">Original prompt fails — the drawer stays shut and the tape is not placed.</div>
+                    <img src="assets/tape_SUCCESS_ours.png" alt="tape drawer success rollout frames" style="margin-top:10px;">
+                    <div class="lbl">Optimized prompt succeeds.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- method (placeholder) ---------- -->
+    <section id="method">
+        <div class="wrap">
+            <h2>Method</h2>
+            <p class="lead">
+                <!-- TODO: describe your method, add a figure -->
+                Add a method figure here (e.g. <code>assets/method.png</code>) and a short description of the
+                prompt-optimization loop: propose candidate prompts → roll out on the robot → score by success
+                rate → keep the best.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- bibtex ---------- -->
+    <section id="bibtex">
+        <div class="wrap">
+            <h2>BibTeX</h2>
+            <pre class="bib">@misc{jiang2026promptopt,
+  title  = {Optimizing Language Prompts for Real-World Vision-Language-Action Policies},
+  author = {Jiang, Xinyun and Others},
+  year   = {2026},
+  url    = {https://xinyunsunshine.github.io/prompt-rl/}
+}</pre>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap">
+            Page template adapted for <a href="https://xinyunsunshine.github.io">xinyunsunshine.github.io</a>.
+            Built from real-robot rollout recordings.
+        </div>
+    </footer>
+</body>
+
+</html>
