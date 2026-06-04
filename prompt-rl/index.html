@@ -7,6 +7,13 @@
     <title>Prompt-Driven Exploration for VLA Policies</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap"
         rel="stylesheet">
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]'], ['$$', '$$']] },
+        svg: { fontCache: 'global' }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
     <style>
         :root {
             --maxw: 1000px;
@@ -30,7 +37,32 @@
         .subtitle { font-size: 1.1rem; color: var(--muted); margin: -8px 0 18px; font-weight: 400; }
         .authors { font-size: 1.1rem; margin: 6px 0; }
         .authors a { color: var(--ink); font-weight: 600; }
-        .affil { color: var(--muted); margin: 4px 0 18px; }
+        .affil { color: var(--muted); margin: 4px 0 14px; }
+        .affil-logos {
+            display: flex; justify-content: center; align-items: center;
+            gap: 32px; flex-wrap: wrap; margin: 6px 0 18px;
+        }
+        .affil-logos img { height: 52px; width: auto; display: block; }
+        .affil-logos .logo-mitibm { height: 80px; }
+        .affil-logos .logo-improbable { height: 78px; }
+        @media (max-width: 700px) {
+            .affil-logos img { height: 38px; }
+            .affil-logos .logo-mitibm { height: 60px; }
+            .affil-logos .logo-improbable { height: 58px; }
+            .affil-logos { gap: 18px; }
+        }
+        .meme {
+            max-width: 820px; margin: 0 auto;
+            border: 1px solid #eaeaea; border-radius: 12px;
+            background: #fff; padding: 18px 18px 8px;
+        }
+        .meme svg { width: 100%; height: auto; display: block; }
+        .meme-punchline {
+            text-align: center; font-size: 1.9rem; color: var(--ink);
+            padding: 18px 12px 10px; font-weight: 700; line-height: 1.3;
+        }
+        @media (max-width: 700px) { .meme-punchline { font-size: 1.4rem; } }
+        .meme-punchline b { color: var(--accent); }
         .links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 18px 0 8px; }
         .links a {
             background: var(--ink); color: #fff; padding: 9px 18px; border-radius: 999px;
@@ -48,12 +80,30 @@
         figure img { width: 100%; display: block; border-radius: 10px; border: 1px solid #eaeaea; background: #fff; }
         figure figcaption { color: var(--muted); font-size: .92rem; margin-top: 8px; text-align: center; line-height: 1.45; }
         figure figcaption b { color: var(--ink); }
+        .plot-row { display: flex; align-items: center; gap: 14px; margin: 18px 0; }
+        .plot-row .model-label {
+            flex: 0 0 70px;
+            text-align: right;
+            font-weight: 800; font-size: 1.25rem; color: var(--ink);
+            letter-spacing: 0.01em;
+        }
+        .plot-row figure { flex: 1; margin: 0; }
+        @media (max-width: 700px) {
+            .plot-row { flex-direction: column; align-items: stretch; gap: 6px; }
+            .plot-row .model-label { text-align: left; flex: 0 0 auto; font-size: 1.1rem; }
+        }
 
         .task { margin: 34px 0; }
         .task h3 { font-size: 1.25rem; margin: 0 0 4px; }
         .task .prompts { color: var(--muted); margin: 0 0 16px; font-size: .98rem; }
         .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .grid3 { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 14px; align-items: stretch; }
+        .grid3 .cell { display: flex; flex-direction: column; }
+        .grid3 .cell video { flex: 1; object-fit: contain; background: #fff; }
         .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .cell.neutral .cap { background: #f1f3f5; color: var(--ink); }
+        .cell-prompt.neutral { background: #f1f3f5; color: var(--ink); }
+        @media (max-width: 800px) { .grid3 { grid-template-columns: 1fr; } }
         .cell { border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; position: relative; }
         .cell .cap { padding: 8px 12px; font-weight: 600; font-size: .95rem; display: flex; justify-content: space-between; gap: 6px; }
         .grid4 .cell .cap { font-size: .82rem; padding: 6px 8px; }
@@ -71,16 +121,92 @@
         }
         .row-prompts { color: var(--muted); margin: 0 0 12px; font-size: .98rem; }
         .row-prompts .pair { display: block; margin: 4px 0; }
-        .grid2-prompts { margin-bottom: 10px; }
+        .grid2-prompts, .grid4-prompts { margin-bottom: 10px; }
         .cell-prompt {
             padding: 8px 12px; border-radius: 8px;
             font-size: .95rem; line-height: 1.4;
         }
+        .grid4 .cell-prompt, .grid4-prompts .cell-prompt { font-size: .82rem; padding: 7px 10px; }
         .cell-prompt.fail-text { background: #fdecea; color: var(--fail); }
         .cell-prompt.ok-text { background: #e8f5ec; color: var(--ok); }
         .cell-prompt i { color: var(--ink); font-style: italic; }
         @media (max-width: 700px) { .grid4 { grid-template-columns: repeat(2, 1fr); } }
 
+        .algo-title {
+            max-width: 820px; margin: 14px auto 0; padding: 12px 20px;
+            background: #f6f8fa; border: 1px solid #eaeaea; border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            font-weight: 700; font-size: 1.02rem; color: var(--ink);
+        }
+        .algo-title + .algo {
+            margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0;
+        }
+        .algo {
+            max-width: 820px; margin: 14px auto 22px; padding: 16px 20px 16px 44px;
+            background: #f6f8fa; border: 1px solid #eaeaea; border-radius: 10px;
+            font-size: 1rem; line-height: 1.55;
+        }
+        .algo li { margin: 4px 0; }
+        .algo li::marker { font-weight: 700; color: var(--accent); }
+        .algo b { color: var(--ink); }
+        .algo i { font-style: italic; color: var(--ink); }
+        .algo-stepper li[data-slide] {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.15s ease;
+        }
+        .algo-stepper li[data-slide]:hover { background: #eef2f8; }
+        .algo-stepper li.active {
+            background: #e7efff;
+            outline: 2px solid var(--accent);
+        }
+
+        /* Outer (orange) box wraps inner (blue) box + RL update step */
+        .outer-loop-box {
+            max-width: 820px; margin: 14px auto 22px;
+            background: #fff4e5;
+            border: 1px solid #ffd9a8;
+            border-radius: 12px;
+            padding: 14px 16px 16px;
+        }
+        .outer-loop-header {
+            font-weight: 700; font-size: 1.02rem; color: #8a4b00;
+            padding: 4px 6px 10px;
+        }
+        .inner-loop-box {
+            background: #eaf2ff;
+            border: 1px solid #c7daf7;
+            border-radius: 10px;
+            padding: 12px 14px 14px;
+            margin-bottom: 12px;
+        }
+        .inner-loop-header {
+            font-weight: 700; font-size: 1rem; color: #1f3a8a;
+            padding: 2px 4px 8px;
+        }
+        .muted-note { font-weight: 400; font-size: .85rem; }
+        .outer-loop-header .muted-note { color: #a06200; }
+        .inner-loop-header .muted-note { color: #5a6c8e; }
+        .algo-nested {
+            max-width: none; margin: 0;
+            background: transparent; border: none; padding: 0 0 0 26px;
+            font-size: 1rem; line-height: 1.55;
+        }
+        .algo-nested li { margin: 4px 0; }
+        .outer-loop-box .outer-step { padding-left: 26px; }
+        .outer-loop-box .outer-step li::marker { color: #e07b00; }
+        .outer-loop-box .outer-step li[data-slide]:hover { background: #ffe9cc; }
+        .outer-loop-box .outer-step li.active {
+            background: #ffe1bf;
+            outline-color: #e07b00;
+        }
+        .stepper-frame {
+            max-width: 820px; margin: 0 auto 22px;
+            border: 1px solid #eaeaea; border-radius: 10px; overflow: hidden;
+            background: #fff;
+        }
+        .stepper-frame img { width: 100%; display: block; }
         .standalone-video { border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; margin: 18px 0; position: relative; }
         .standalone-video video { width: 100%; display: block; background: #000; }
         .standalone-video .cap { padding: 10px 14px; color: var(--muted); font-size: .92rem; line-height: 1.45; }
@@ -95,6 +221,30 @@
             background: #f6f8fa; border: 1px solid #eaeaea; border-radius: 10px;
             padding: 16px; overflow-x: auto; font-size: .85rem; line-height: 1.45;
         }
+        .poster-link {
+            display: block;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.15s ease, transform 0.15s ease;
+        }
+        .poster-link:hover {
+            box-shadow: 0 6px 24px rgba(42,109,244,0.18);
+            text-decoration: none;
+        }
+        .poster-link img { width: 100%; display: block; }
+        .poster-cta {
+            background: var(--ink); color: #fff;
+            padding: 14px 20px; text-align: center;
+            font-weight: 700; font-size: 1rem;
+            letter-spacing: 0.02em;
+        }
+        .poster-link:hover .poster-cta { background: var(--accent); }
         footer { text-align: center; color: var(--muted); padding: 40px 0; font-size: .9rem; }
         @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } h1.title { font-size: 1.6rem; } }
     </style>
@@ -103,27 +253,68 @@
 <body>
     <header class="hero">
         <div class="wrap">
-            <h1 class="title">Prompt-Driven Exploration<br>for Vision-Language-Action Policies</h1>
+            <h1 class="title">Prompt-Driven Exploration</h1>
             <div class="subtitle">Bootstrapping RL from zero-reward starts by exploring in prompt space</div>
             <div class="authors">
-                <a href="https://xinyunsunshine.github.io">Sunshine Jiang</a>,
-                <a href="#">John Marangola</a>,
-                <a href="#">David Zhang</a>,
-                <a href="#">Raghuram Kowdeed</a>,
-                <a href="#">Ruiyang Luo</a>,
-                <a href="https://www.nitishdashora.com/">Nitish Dashora</a>,
-                <a href="https://richardrl.github.io/">Richard Li</a>,
-                <a href="https://people.csail.mit.edu/pulkitag/">Pulkit Agrawal</a>,
-                <a href="https://williamd4112.github.io/">Zhang-Wei Hong</a>
+                <a href="https://xinyunsunshine.github.io">Sunshine Jiang</a><sup>1,3</sup>,
+                <a href="#">John Marangola</a><sup>1,3</sup>,
+                <a href="#">David Zhang</a><sup>1,3</sup>,
+                <a href="#">Raghuram Kowdeed</a><sup>3</sup>,
+                <a href="#">Ruiyang Luo</a><sup>1,3</sup>,
+                <a href="https://www.nitishdashora.com/">Nitish Dashora</a><sup>1,3</sup>,
+                <a href="https://richardrl.github.io/">Richard Li</a><sup>1,3</sup>,
+                <a href="https://people.csail.mit.edu/pulkitag/">Pulkit Agrawal</a><sup>1,3</sup>,
+                <a href="https://williamd4112.github.io/">Zhang-Wei Hong</a><sup>1,2,3</sup>
             </div>
-            <div class="affil">MIT CSAIL &nbsp;·&nbsp; Improbable AI Lab</div>
+            <div class="affil"><sup>1</sup>Massachusetts Institute of Technology &nbsp;·&nbsp; <sup>2</sup>MIT-IBM Computing Research Lab &nbsp;·&nbsp; <sup>3</sup>Improbable AI Lab</div>
+            <div class="affil-logos">
+                <img class="logo-mit" src="assets/logo_mit.png" alt="MIT">
+                <img class="logo-mitibm" src="assets/logo_mitibm.png" alt="MIT-IBM Watson AI Lab">
+                <img class="logo-improbable" src="assets/logo_improbable.png" alt="Improbable AI Lab">
+            </div>
             <div class="links">
-                <a href="#">📄 Paper</a>
-                <a href="#method">▶ Method</a>
-                <a href="#sim-results">▶ Results</a>
+                <a href="assets/pde_paper.pdf" target="_blank" rel="noopener">📄 Paper</a>
+                <a href="assets/pde_poster.pdf" target="_blank" rel="noopener">🖼 Poster</a>
             </div>
         </div>
     </header>
+
+    <!-- ---------- punchline ---------- -->
+    <section id="punchline" style="padding: 8px 0 18px;">
+        <div class="wrap">
+            <p class="meme-punchline">
+                Stop tuning the algorithms. <b>Change the prompts.</b>
+            </p>
+        </div>
+    </section>
+
+    <!-- ---------- teaser: rack + training curve ---------- -->
+    <section id="teaser" style="padding-top:10px;">
+        <div class="wrap">
+            <div class="task" style="margin-top:0;">
+                <div class="grid3 grid3-prompts" style="margin-bottom:10px;">
+                    <div class="cell-prompt fail-text">Original: <i>“put the green container on the top rack”</i></div>
+                    <div class="cell-prompt ok-text">PDE-discovered: <i>“put the green container on the top rack <b>completely</b>”</i></div>
+                    <div class="cell-prompt neutral"><b>PDE bootstraps RL from low initial success</b></div>
+                </div>
+                <div class="grid3">
+                    <div class="cell fail">
+                        <div class="cap"><span>Original prompt</span><span class="pill">fail</span></div>
+                        <video src="assets/container_rack_fail.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">2×</span>
+                    </div>
+                    <div class="cell ok">
+                        <div class="cap"><span>PDE-discovered prompt</span><span class="pill">success</span></div>
+                        <video src="assets/container_rack_success.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">2×</span>
+                    </div>
+                    <div class="cell neutral">
+                        <video src="assets/training_curve.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <div class="divider"></div>
 
@@ -155,63 +346,42 @@
     <!-- ---------- before vs after (lead example) ---------- -->
     <section id="before-after">
         <div class="wrap">
-            <h2>Before vs. after prompt optimization<span class="sub">Same policy weights, same scene — only the wording changes.</span></h2>
-
-            <div class="task">
-                <h3>Put the green container on the top rack</h3>
-                <div class="grid2 grid2-prompts">
-                    <div class="cell-prompt fail-text">Original: <i>“put the green container on the top rack”</i></div>
-                    <div class="cell-prompt ok-text">PDE-discovered: <i>“put the green container on the top rack <b>completely</b>”</i></div>
-                </div>
-                <div class="grid2">
-                    <div class="cell fail">
-                        <div class="cap"><span>Original prompt</span><span class="pill">fail</span></div>
-                        <video src="assets/container_rack_fail.mp4" autoplay loop muted playsinline></video>
-                        <span class="speed">2×</span>
-                    </div>
-                    <div class="cell ok">
-                        <div class="cap"><span>PDE-discovered prompt</span><span class="pill">success</span></div>
-                        <video src="assets/container_rack_success.mp4" autoplay loop muted playsinline></video>
-                        <span class="speed">2×</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="task">
-                <h3>Real-robot tasks (Franka)</h3>
-                <p class="row-prompts">
-                    <span class="pair"><b>Bowl:</b> <i>“put the green container in the bowl”</i> &nbsp;→&nbsp;
-                        <i>“put the green container in the <b>green</b> bowl”</i></span>
-                    <span class="pair"><b>Drawer:</b> <i>“open the top drawer and put the tape <b>above</b> inside”</i> &nbsp;→&nbsp;
-                        <i>“open the top drawer and put the tape inside”</i></span>
-                </p>
-                <div class="grid4">
-                    <div class="cell fail">
-                        <span class="speed">4×</span>
-                        <div class="cap"><span>Original</span><span class="pill">≈ 4%</span></div>
-                        <video src="assets/greenbowl_FAIL_original.mp4" autoplay loop muted playsinline></video>
-                    </div>
-                    <div class="cell ok">
-                        <span class="speed">4×</span>
-                        <div class="cap"><span>Optimized</span><span class="pill">≈ 35%</span></div>
-                        <video src="assets/greenbowl_SUCCESS_ours.mp4" autoplay loop muted playsinline></video>
-                    </div>
-                    <div class="cell fail">
-                        <span class="speed">4×</span>
-                        <div class="cap"><span>Original</span><span class="pill">≈ 15%</span></div>
-                        <video src="assets/tape_FAIL_original.mp4" autoplay loop muted playsinline></video>
-                    </div>
-                    <div class="cell ok">
-                        <span class="speed">4×</span>
-                        <div class="cap"><span>Optimized</span><span class="pill">≈ 45%</span></div>
-                        <video src="assets/tape_SUCCESS_ours.mp4" autoplay loop muted playsinline></video>
-                    </div>
-                </div>
-            </div>
+            <h2>Bad prompt lets the robot down, good prompt lets the robot fly<span class="sub">Same policy weights, same scene — only the wording changes.</span></h2>
 
             <div class="takeaway">
                 <b>Refining prompts explores globally:</b> qualitatively different strategies, not local jitter
                 around the same wrong motor program.
+            </div>
+
+            <div class="task" style="margin-top:0;">
+                <div class="grid4 grid4-prompts">
+                    <div class="cell-prompt fail-text"><b>Bowl:</b> <i>“put the green container in the bowl”</i></div>
+                    <div class="cell-prompt ok-text"><b>Bowl:</b> <i>“put the green container in the <b>green</b> bowl”</i></div>
+                    <div class="cell-prompt fail-text"><b>Drawer:</b> <i>“open the top drawer and put the tape <b>above</b> inside”</i></div>
+                    <div class="cell-prompt ok-text"><b>Drawer:</b> <i>“open the top drawer and put the tape inside”</i></div>
+                </div>
+                <div class="grid4">
+                    <div class="cell fail">
+                        <div class="cap"><span>Original</span><span class="pill">success rate ≈ 5%</span></div>
+                        <video src="assets/greenbowl_FAIL_original.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">4×</span>
+                    </div>
+                    <div class="cell ok">
+                        <div class="cap"><span>Optimized</span><span class="pill">success rate ≈ 35%</span></div>
+                        <video src="assets/greenbowl_SUCCESS_ours.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">4×</span>
+                    </div>
+                    <div class="cell fail">
+                        <div class="cap"><span>Original</span><span class="pill">success rate ≈ 15%</span></div>
+                        <video src="assets/tape_FAIL_original.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">4×</span>
+                    </div>
+                    <div class="cell ok">
+                        <div class="cap"><span>Optimized</span><span class="pill">success rate ≈ 45%</span></div>
+                        <video src="assets/tape_SUCCESS_ours.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">4×</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -221,7 +391,7 @@
     <!-- ---------- failure mode ---------- -->
     <section id="motivation">
         <div class="wrap">
-            <h2>Why action-space noise gets stuck<span class="sub">Three consecutive rollouts of an SFT VLA — same failure every time.</span></h2>
+            <h2>Same arm, same plan, same regret<span class="sub">Three rollouts of an SFT VLA — action noise is trying its best, but the cabinet wins every time.</span></h2>
             <div class="standalone-video">
                 <span class="speed">2×</span>
                 <video src="assets/three_consecutive_fail.mp4" autoplay loop muted playsinline></video>
@@ -244,33 +414,112 @@
     <!-- ---------- closed-loop optimization video ---------- -->
     <section id="loop">
         <div class="wrap">
-            <h2>Closed-loop prompt optimization<span class="sub">VLM proposes → VLA rolls out → VLM diagnoses → propose again.</span></h2>
+            <h2>Prompt Driven Exploration (PDE)</h2>
+            <p class="lead">
+                Your VLA is stuck. Wiggling its joints harder won't help. So we hand the mic to a VLM:
+                it watches the rollout, writes a brutally honest one-liner about what went wrong, and
+                proposes a better prompt. <b>Same policy weights, very different behavior.</b>
+            </p>
+            <p class="lead" style="margin-bottom:6px;color:var(--muted);font-size:.95rem;text-align:center;">
+                Click any step to advance the pipeline below.
+            </p>
+            <div class="outer-loop-box">
+                <div class="outer-loop-header">Outer loop — RL update <span class="muted-note">(policy weights updated)</span></div>
+                <div class="inner-loop-box">
+                    <div class="inner-loop-header">Inner loop — prompt refinement <span class="muted-note">(frozen policy weights)</span></div>
+                    <ol class="algo algo-stepper algo-nested" data-stepper="pde">
+                        <li data-slide="assets/pipeline_init.png" class="active"><b>Initialize.</b> Start with the user's task prompt \(p\) (e.g. <i>“put the green container on the top rack”</i>).</li>
+                        <li data-slide="assets/pipeline_rollout.png"><b>Roll out.</b> Frozen VLA executes \(p\), producing a rollout video \(\tau\).</li>
+                        <li data-slide="assets/pipeline_evaluate.png"><b>Evaluate.</b> VLM watches \(\tau\) and labels it <i>success</i> or <i>failure</i>. If success, exit the inner loop.</li>
+                        <li data-slide="assets/pipeline_revise.png"><b>Revise.</b> On failure, VLM analyzes \(\tau\) and proposes a refined prompt \(p'\) (e.g. <i>“put the green box <b>completely</b> on the top rack”</i>) — the <i>Update Prompt Posterior</i> arrow.</li>
+                        <li data-slide="assets/pipeline_init.png"><b>Repeat</b> with \(p \leftarrow p'\) until success or budget exhausted. <b>No gradient updates</b> on the policy.</li>
+                    </ol>
+                </div>
+                <ol class="algo algo-stepper algo-nested outer-step" data-stepper="pde" start="6">
+                    <li data-slide="assets/pipeline_rl_update.png"><b>RL update.</b> Use the prompt pool discovered by the inner loop as a curriculum; run PPO on the original task prompt with the policy gradient flowing through the <i>RL Update</i> arrow back into \(\pi_\theta\).</li>
+                </ol>
+            </div>
+            <div class="stepper-frame">
+                <img id="pde-stepper-img" src="assets/pipeline_init.png" alt="PDE pipeline — current step">
+            </div>
+            <script>
+                (function(){
+                    const lists = document.querySelectorAll('[data-stepper="pde"]');
+                    const img = document.getElementById('pde-stepper-img');
+                    if (!lists.length || !img) return;
+                    const steps = [];
+                    lists.forEach(ul => ul.querySelectorAll('li[data-slide]').forEach(li => steps.push(li)));
+                    if (!steps.length) return;
+                    const clearActive = () => steps.forEach(o => o.classList.remove('active'));
+                    const showStep = (li) => {
+                        clearActive();
+                        li.classList.add('active');
+                        img.src = li.dataset.slide;
+                    };
+                    let userInteracted = false;
+                    let i = 0;
+                    const STEP_MS = 1800;
+                    const tick = () => {
+                        if (userInteracted) return;
+                        showStep(steps[i]);
+                        i = (i + 1) % steps.length;
+                    };
+                    tick();
+                    const timer = setInterval(() => {
+                        if (userInteracted) { clearInterval(timer); return; }
+                        tick();
+                    }, STEP_MS);
+                    steps.forEach(li => {
+                        li.addEventListener('click', () => {
+                            userInteracted = true;
+                            clearInterval(timer);
+                            showStep(li);
+                        });
+                    });
+                })();
+            </script>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- closed-loop optimization video ---------- -->
+    <section id="method">
+        <div class="wrap">
             <div class="standalone-video">
                 <span class="speed">2×</span>
                 <video src="assets/green_container_prompt_opt.mp4" autoplay loop muted playsinline></video>
-                <div class="cap">
-                    Each iteration: the VLM samples a candidate prompt, the frozen VLA executes it, and the
-                    VLM watches the resulting video. A one-sentence summary of what went wrong is appended to
-                    the history, conditioning the next proposal. No gradient updates are taken on the policy.
-                </div>
             </div>
         </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ---------- method ---------- -->
-    <section id="method">
+    <!-- ---------- posterior sampling connection ---------- -->
+    <section id="psrl">
         <div class="wrap">
-            <h2>Method: Prompt-Driven Exploration<span class="sub">Posterior sampling, realized in language.</span></h2>
-            <div class="standalone-video">
-                <video src="assets/pipeline_build.mp4" autoplay loop muted playsinline></video>
-                <div class="cap">
-                    The PDE pipeline, built up step by step. A prompt posterior <i>ρ(·∣g)</i> conditioned on the
-                    task description proposes candidate prompts; each prompt induces a distinct policy from the
-                    frozen VLA; rollouts and rewards flow back through the VLM, which updates the posterior. The
-                    pool of high-success prompts then seeds RL on the original task prompt.
-                </div>
+            <h2>Connecting to Posterior-Sampling RL<span class="sub">PDE is PSRL — lifted from the VLA's parameter space to the VLM's prompt space.</span></h2>
+            <p class="lead">
+                <b>Posterior-sampling RL (PSRL)</b> maintains a distribution over policies, samples one
+                per episode, executes it, and updates from the observed trajectory and reward. It's a
+                clean, temporally coherent exploration recipe — but for modern VLAs, a Bayesian posterior
+                over billions of parameters is intractable to maintain or sample from.
+            </p>
+            <p class="lead" style="margin-top:14px;">
+                PDE recovers PSRL through the language interface. For a frozen VLA with parameters
+                \(\theta\), each prompt \(p\) induces a policy
+                \(\pi_p(\cdot \mid o) := \pi_\theta(\cdot \mid o, p)\). So a distribution over prompts
+                \(\rho(\cdot \mid g, H)\) induces a distribution over policies — restricted to the family
+                reachable by the VLA's language conditioning. <b>Drawing a policy hypothesis becomes
+                choosing a prompt.</b>
+            </p>
+            <div class="takeaway">
+                <b>The VLM is an implicit, amortized prompt posterior.</b> Rather than maintaining an
+                explicit density over natural language, PDE conditions the VLM on the rollout history
+                \(H_i = \{(g_j, p_j, \tau_j, r_j)\}_{j \lt i}\)
+                and queries it for the next prompt. The update is in-context — no gradient steps, no
+                explicit Bayes rule — leveraging evidence that LLM in-context learning behaves as
+                approximate Bayesian inference.
             </div>
         </div>
     </section>
@@ -280,44 +529,38 @@
     <!-- ---------- sim results ---------- -->
     <section id="sim-results">
         <div class="wrap">
-            <h2>Simulation results<span class="sub">LIBERO benchmark · PDE vs. action-space exploration</span></h2>
-            <figure>
-                <img src="assets/libero_pi05_envsteps.png" alt="LIBERO Pi0.5 — success rate vs. environment steps for PDE and baselines.">
-                <figcaption>
-                    <b>LIBERO · Pi0.5.</b> Success rate vs. environment steps across five variations. PDE
-                    bootstraps from the zero-reward regime where action-noise PPO, high-temperature PPO, and
-                    entropy-bonus PPO all stall.
-                </figcaption>
-            </figure>
-            <figure>
-                <img src="assets/libero_pi0_envsteps.png" alt="LIBERO Pi0 — PDE vs. action-noise baselines on the Pi0 backbone.">
-                <figcaption>
-                    <b>LIBERO · Pi0.</b> Same comparison on the Pi0 backbone — the qualitative gap holds across
-                    base models.
-                </figcaption>
-            </figure>
-            <figure>
-                <img src="assets/gr00t_envsteps.png" alt="GR00T — PDE bootstraps where action-space exploration fails.">
-                <figcaption>
-                    <b>GR00T.</b> The same PDE recipe transfers to a different VLA family, again converting
-                    near-zero baselines into reliable success.
-                </figcaption>
-            </figure>
+            <h2>PDE outperforms dense reward and action noise baselines<span class="sub">Across <b style="color:var(--accent);">200+ tasks</b> in LIBERO-PRO and ManiSkill</span></h2>
+            <div class="plot-row">
+                <div class="model-label">\(\pi_{0.5}\)</div>
+                <figure>
+                    <img src="assets/libero_pi05_envsteps.png" alt="LIBERO Pi0.5 — success rate vs. environment steps for PDE and baselines.">
+                </figure>
+            </div>
+            <div class="plot-row">
+                <div class="model-label">\(\pi_0\)</div>
+                <figure>
+                    <img src="assets/libero_pi0_envsteps.png" alt="LIBERO Pi0 — PDE vs. action-noise baselines on the Pi0 backbone.">
+                </figure>
+            </div>
+            <div class="plot-row">
+                <div class="model-label">GR00T</div>
+                <figure>
+                    <img src="assets/gr00t_envsteps.png" alt="GR00T — PDE bootstraps where action-space exploration fails.">
+                </figure>
+            </div>
         </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ---------- bibtex ---------- -->
-    <section id="bibtex">
+    <!-- ---------- poster ---------- -->
+    <section id="poster">
         <div class="wrap">
-            <h2>BibTeX</h2>
-            <pre class="bib">@misc{jiang2026pde,
-  title  = {Prompt-Driven Exploration for Vision-Language-Action Policies},
-  author = {Jiang, Sunshine and Marangola, John and Zhang, David and Kowdeed, Raghuram and Luo, Ruiyang and Dashora, Nitish and Li, Richard and Agrawal, Pulkit and Hong, Zhang-Wei},
-  year   = {2026},
-  url    = {https://xinyunsunshine.github.io/prompt-rl/}
-}</pre>
+            <h2>Poster<span class="sub">ICRA'26 Workshop on VLA Pipelines for Real Robots &amp; Workshop on Manipulation Robustness</span></h2>
+            <a class="poster-link" href="assets/pde_poster.pdf" target="_blank" rel="noopener" aria-label="Download the PDE poster (PDF)">
+                <img src="assets/pde_poster_preview.png" alt="PDE poster preview — click to open the full PDF">
+                <div class="poster-cta">📄 Download full poster (PDF)</div>
+            </a>
         </div>
     </section>
 

@@ -4,3 +4,8 @@
 # Source materials (kept locally, not published)
 *.key
 *.zip
+
+# Backups and root-level source PDFs (duplicated in prompt-rl/assets/)
+*.bak
+/Prompt_optimization_VLA_preprint.pdf
+/icra_pde_poster_new.pdf
