@@ -293,8 +293,8 @@
         <div class="wrap">
             <div class="task" style="margin-top:0;">
                 <div class="grid3 grid3-prompts" style="margin-bottom:10px;">
-                    <div class="cell-prompt fail-text">Original: <i>“put the green container on the top rack”</i></div>
-                    <div class="cell-prompt ok-text">PDE-discovered: <i>“put the green container on the top rack <b>completely</b>”</i></div>
+                    <div class="cell-prompt fail-text">Original: <i>“put the green container on the bottom rack”</i></div>
+                    <div class="cell-prompt ok-text">PDE-discovered: <i>“put the green container on the bottom rack <b>completely</b>”</i></div>
                     <div class="cell-prompt neutral"><b>PDE bootstraps RL from low initial success</b></div>
                 </div>
                 <div class="grid3">
@@ -428,10 +428,10 @@
                 <div class="inner-loop-box">
                     <div class="inner-loop-header">Inner loop — prompt refinement <span class="muted-note">(frozen policy weights)</span></div>
                     <ol class="algo algo-stepper algo-nested" data-stepper="pde">
-                        <li data-slide="assets/pipeline_init.png" class="active"><b>Initialize.</b> Start with the user's task prompt \(p\) (e.g. <i>“put the green container on the top rack”</i>).</li>
+                        <li data-slide="assets/pipeline_init.png" class="active"><b>Initialize.</b> Start with the user's task prompt \(p\) (e.g. <i>“put the green container on the bottom rack”</i>).</li>
                         <li data-slide="assets/pipeline_rollout.png"><b>Roll out.</b> Frozen VLA executes \(p\), producing a rollout video \(\tau\).</li>
                         <li data-slide="assets/pipeline_evaluate.png"><b>Evaluate.</b> VLM watches \(\tau\) and labels it <i>success</i> or <i>failure</i>. If success, exit the inner loop.</li>
-                        <li data-slide="assets/pipeline_revise.png"><b>Revise.</b> On failure, VLM analyzes \(\tau\) and proposes a refined prompt \(p'\) (e.g. <i>“put the green box <b>completely</b> on the top rack”</i>) — the <i>Update Prompt Posterior</i> arrow.</li>
+                        <li data-slide="assets/pipeline_revise.png"><b>Revise.</b> On failure, VLM analyzes \(\tau\) and proposes a refined prompt \(p'\) (e.g. <i>“put the green box <b>completely</b> on the bottom rack”</i>) — the <i>Update Prompt Posterior</i> arrow.</li>
                         <li data-slide="assets/pipeline_init.png"><b>Repeat</b> with \(p \leftarrow p'\) until success or budget exhausted. <b>No gradient updates</b> on the policy.</li>
                     </ol>
                 </div>
