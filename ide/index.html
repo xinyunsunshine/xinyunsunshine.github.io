@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Correct Me If I'm Wrong: Language-Guided Exploration for VLAs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]'], ['$$', '$$']] },
+        svg: { fontCache: 'global' }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+    <style>
+        :root {
+            --maxw: 1000px;
+            --accent: #2a6df4;
+            --fail: #c0392b;
+            --ok: #1e8e3e;
+            --ink: #1a1a1a;
+            --muted: #666;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans Pro', -apple-system, Helvetica, Arial, sans-serif;
+            color: var(--ink); margin: 0; line-height: 1.6; background: #fff;
+        }
+        .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        header.hero { text-align: center; padding: 56px 0 8px; }
+        h1.title { font-size: 2.2rem; font-weight: 900; line-height: 1.2; margin: 0 0 18px; }
+        .subtitle { font-size: 1.1rem; color: var(--muted); margin: -8px 0 18px; font-weight: 400; }
+        .authors { font-size: 1.1rem; margin: 6px 0; }
+        .authors a { color: var(--ink); font-weight: 600; }
+        .affil { color: var(--muted); margin: 4px 0 14px; }
+        .affil-logos {
+            display: flex; justify-content: center; align-items: center;
+            gap: 32px; flex-wrap: wrap; margin: 6px 0 18px;
+        }
+        .affil-logos img { height: 52px; width: auto; display: block; }
+        .affil-logos .logo-mitibm { height: 80px; }
+        .affil-logos .logo-improbable { height: 78px; }
+        @media (max-width: 700px) {
+            .affil-logos img { height: 38px; }
+            .affil-logos .logo-mitibm { height: 60px; }
+            .affil-logos .logo-improbable { height: 58px; }
+            .affil-logos { gap: 18px; }
+        }
+        .meme-punchline {
+            text-align: center; font-size: 1.9rem; color: var(--ink);
+            padding: 18px 12px 10px; font-weight: 700; line-height: 1.3;
+        }
+        @media (max-width: 700px) { .meme-punchline { font-size: 1.4rem; } }
+        .meme-punchline b { color: var(--accent); }
+        .links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 18px 0 8px; }
+        .links a {
+            background: var(--ink); color: #fff; padding: 9px 18px; border-radius: 999px;
+            font-weight: 600; font-size: .95rem;
+        }
+        .links a:hover { background: var(--accent); text-decoration: none; }
+
+        section { padding: 30px 0; }
+        h2 { font-size: 1.6rem; font-weight: 700; text-align: center; margin: 0 0 18px; }
+        h2 .sub { display: block; font-weight: 400; font-size: 1rem; color: var(--muted); margin-top: 4px; }
+        .lead { font-size: 1.05rem; max-width: 820px; margin: 0 auto; }
+        .divider { border-top: 1px solid #eee; margin: 8px auto; max-width: var(--maxw); }
+
+        figure { margin: 18px 0; }
+        figure img { width: 100%; display: block; border-radius: 10px; border: 1px solid #eaeaea; background: #fff; }
+        figure figcaption { color: var(--muted); font-size: .92rem; margin-top: 8px; text-align: center; line-height: 1.45; }
+        figure figcaption b { color: var(--ink); }
+
+        .task { margin: 34px 0; }
+        .task h3 { font-size: 1.25rem; margin: 0 0 4px; }
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: stretch; }
+        .grid3 .cell { display: flex; flex-direction: column; }
+        .grid3 .cell video { flex: 1; object-fit: contain; background: #fff; }
+        @media (max-width: 800px) { .grid3 { grid-template-columns: 1fr; } }
+        .cell { border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; position: relative; }
+        .cell .cap { padding: 8px 12px; font-weight: 600; font-size: .95rem; display: flex; justify-content: space-between; gap: 6px; }
+        .cell.fail .cap { background: #fdecea; color: var(--fail); }
+        .cell.ok   .cap { background: #e8f5ec; color: var(--ok); }
+        .cell.neutral .cap { background: #f1f3f5; color: var(--ink); }
+        .cell video, .cell img { width: 100%; display: block; background: #000; }
+        .pill { font-variant-numeric: tabular-nums; }
+        .speed {
+            position: absolute; bottom: 8px; right: 8px;
+            background: rgba(0,0,0,0.7); color: #fff;
+            padding: 3px 8px; border-radius: 999px;
+            font-size: .78rem; font-weight: 700;
+            letter-spacing: 0.02em; pointer-events: none;
+            z-index: 2;
+        }
+        .cell-prompt {
+            padding: 8px 12px; border-radius: 8px;
+            font-size: .95rem; line-height: 1.4;
+        }
+        .cell-prompt.fail-text { background: #fdecea; color: var(--fail); }
+        .cell-prompt.ok-text { background: #e8f5ec; color: var(--ok); }
+        .cell-prompt.neutral { background: #f1f3f5; color: var(--ink); }
+        .cell-prompt i { color: var(--ink); font-style: italic; }
+        .grid3-prompts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 10px; }
+        @media (max-width: 800px) { .grid3-prompts { grid-template-columns: 1fr; } }
+
+        .algo-title {
+            max-width: 820px; margin: 14px auto 0; padding: 12px 20px;
+            background: #f6f8fa; border: 1px solid #eaeaea; border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            font-weight: 700; font-size: 1.02rem; color: var(--ink);
+        }
+        .algo-title + .algo {
+            margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0;
+        }
+        .algo {
+            max-width: 820px; margin: 14px auto 22px; padding: 16px 20px 16px 44px;
+            background: #f6f8fa; border: 1px solid #eaeaea; border-radius: 10px;
+            font-size: 1rem; line-height: 1.55;
+        }
+        .algo li { margin: 4px 0; }
+        .algo li::marker { font-weight: 700; color: var(--accent); }
+        .algo b { color: var(--ink); }
+        .algo i { font-style: italic; color: var(--ink); }
+
+        .outer-loop-box {
+            max-width: 820px; margin: 14px auto 22px;
+            background: #fff4e5;
+            border: 1px solid #ffd9a8;
+            border-radius: 12px;
+            padding: 14px 16px 16px;
+        }
+        .outer-loop-header {
+            font-weight: 700; font-size: 1.02rem; color: #8a4b00;
+            padding: 4px 6px 10px;
+        }
+        .inner-loop-box {
+            background: #eaf2ff;
+            border: 1px solid #c7daf7;
+            border-radius: 10px;
+            padding: 12px 14px 14px;
+            margin-bottom: 12px;
+        }
+        .inner-loop-header {
+            font-weight: 700; font-size: 1rem; color: #1f3a8a;
+            padding: 2px 4px 8px;
+        }
+        .muted-note { font-weight: 400; font-size: .85rem; }
+        .outer-loop-header .muted-note { color: #a06200; }
+        .inner-loop-header .muted-note { color: #5a6c8e; }
+        .algo-nested {
+            max-width: none; margin: 0;
+            background: transparent; border: none; padding: 0 0 0 26px;
+            font-size: 1rem; line-height: 1.55;
+        }
+        .algo-nested li { margin: 4px 0; }
+        .outer-loop-box .outer-step { padding-left: 26px; }
+        .outer-loop-box .outer-step li::marker { color: #e07b00; }
+
+        .standalone-video { border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; margin: 18px 0; position: relative; }
+        .standalone-video video { width: 100%; display: block; background: #000; }
+        .standalone-video .cap { padding: 10px 14px; color: var(--muted); font-size: .92rem; line-height: 1.45; }
+
+        .takeaway {
+            background: #f6f8fa; border-left: 4px solid var(--accent);
+            padding: 12px 16px; border-radius: 6px; margin: 18px 0;
+            font-size: 1rem;
+        }
+
+        table.results {
+            width: 100%; max-width: 820px; margin: 12px auto;
+            border-collapse: collapse; font-size: .95rem;
+        }
+        table.results th, table.results td {
+            padding: 8px 10px; text-align: right;
+            border-bottom: 1px solid #eaeaea;
+        }
+        table.results th:first-child, table.results td:first-child { text-align: left; }
+        table.results thead th { background: #f6f8fa; font-weight: 700; }
+        table.results tbody tr:last-child { font-weight: 700; background: #fafbfc; }
+        table.results td.ours { color: var(--accent); font-weight: 700; }
+        table.results caption { color: var(--muted); font-size: .9rem; padding: 6px 0; text-align: left; caption-side: bottom; }
+
+        pre.bib {
+            background: #f6f8fa; border: 1px solid #eaeaea; border-radius: 10px;
+            padding: 16px; overflow-x: auto; font-size: .85rem; line-height: 1.45;
+        }
+        footer { text-align: center; color: var(--muted); padding: 40px 0; font-size: .9rem; }
+        @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } h1.title { font-size: 1.6rem; } }
+    </style>
+</head>
+
+<body>
+    <header class="hero">
+        <div class="wrap">
+            <h1 class="title">Correct Me If I'm Wrong</h1>
+            <div class="subtitle">Language-guided exploration for VLA post-training — the human on-site is your best exploration heuristic.</div>
+            <div class="authors">
+                <a href="https://xinyunsunshine.github.io">Sunshine Jiang</a><sup>1</sup>,
+                <a href="#">John Marangola</a><sup>1</sup>,
+                <a href="#">David Zhang</a><sup>1</sup>,
+                <a href="https://www.nitishdashora.com/">Nitish Dashora</a><sup>1</sup>,
+                <a href="https://people.csail.mit.edu/pulkitag/">Pulkit Agrawal</a><sup>1</sup>,
+                <a href="https://williamd4112.github.io/">Zhang-Wei Hong</a><sup>1,2</sup>
+            </div>
+            <div class="affil"><sup>1</sup>Massachusetts Institute of Technology &nbsp;·&nbsp; <sup>2</sup>MIT-IBM Watson AI Lab</div>
+            <div class="affil-logos">
+                <img class="logo-mit" src="assets/logo_mit.png" alt="MIT">
+                <img class="logo-mitibm" src="assets/logo_mitibm.png" alt="MIT-IBM Watson AI Lab">
+            </div>
+            <div class="links">
+                <a href="assets/ide_paper.pdf" target="_blank" rel="noopener">📄 Paper</a>
+                <a href="#method">🧠 Method</a>
+                <a href="#results">📊 Results</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ---------- punchline ---------- -->
+    <section id="punchline" style="padding: 8px 0 18px;">
+        <div class="wrap">
+            <p class="meme-punchline">
+                Stop babysitting the SpaceMouse. <b>Just talk to the robot.</b>
+            </p>
+        </div>
+    </section>
+
+    <!-- ---------- teaser ---------- -->
+    <section id="teaser" style="padding-top:10px;">
+        <div class="wrap">
+            <div class="task" style="margin-top:0;">
+                <div class="grid3-prompts">
+                    <div class="cell-prompt fail-text"><b>Canonical prompt:</b> <i>“open the top drawer and put the bowl inside”</i></div>
+                    <div class="cell-prompt ok-text"><b>Mid-rollout intervention:</b> <i>“pull open the top drawer” → “move the bowl higher” → …</i></div>
+                    <div class="cell-prompt neutral"><b>After RL fine-tuning</b> on IDE rollouts, the canonical prompt alone succeeds.</div>
+                </div>
+                <div class="grid3">
+                    <div class="cell fail">
+                        <div class="cap"><span>SFT under canonical prompt</span><span class="pill">fail</span></div>
+                        <video src="assets/three_consecutive_fail.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">2×</span>
+                    </div>
+                    <div class="cell ok">
+                        <div class="cap"><span>SFT + mid-rollout language</span><span class="pill">success</span></div>
+                        <video src="assets/teaser_with_intervention.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">2×</span>
+                    </div>
+                    <div class="cell neutral">
+                        <div class="cap"><span>Training curve (drawer)</span><span class="pill">IDE ≫ PPO</span></div>
+                        <video src="assets/training_curve_drawer.mp4" autoplay loop muted playsinline></video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- abstract ---------- -->
+    <section id="abstract">
+        <div class="wrap">
+            <h2>Abstract</h2>
+            <p class="lead">
+                Reinforcement learning is a promising framework for improving vision-language-action (VLA)
+                models through interaction, but it often struggles when the initial policy repeatedly fails
+                in the same way. Our key observation is that these models already offer a simple way for
+                humans to change what the policy attempts — through <b>language</b>. In real-world robot
+                training, humans often need to stay nearby to monitor rollouts, reset environments, and check
+                progress; while watching, a human can redirect exploration by simply revising the instruction,
+                without providing low-level actions or directly controlling the robot. We introduce
+                <b>Instruction-Driven Exploration (IDE)</b>, an interactive post-training framework that uses
+                human prompt updates to help VLAs collect more useful experience. On real-world physical
+                robots, IDE significantly improves sample efficiency over standard RL, making robot learning
+                more practical under limited data. We further show that interactive post-training makes VLAs
+                more responsive to prompt updates at test time, enabling users to guide robot behavior through
+                natural language during execution.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- motivation: same failure over and over ---------- -->
+    <section id="motivation">
+        <div class="wrap">
+            <h2>Standard RL keeps collecting the same failure<span class="sub">A weak SFT checkpoint gets stuck. Action noise doesn't rescue it — it just re-samples the same bad plan.</span></h2>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/standard_rl_fail.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    Standard PPO on the canonical prompt collects near-zero reward: every rollout fails in the same way,
+                    so the policy gradient has nothing to push on. Meanwhile, a human is already right there — resetting
+                    the scene, watching the robot fumble.
+                </div>
+            </div>
+            <div class="takeaway">
+                <b>Insight.</b> The human on-site is <i>already</i> supervising. The cheapest thing they can do isn't
+                grab a SpaceMouse — it's re-word the instruction. Because the VLA is prompt-conditioned, changing the
+                prompt changes the whole rollout: a global perturbation action noise cannot produce.
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- language steers a frozen policy ---------- -->
+    <section id="steering">
+        <div class="wrap">
+            <h2>Language alone steers a frozen policy<span class="sub">Same weights, same scene — a single reworded prompt flips fail to success.</span></h2>
+
+            <div class="takeaway">
+                <b>Two failure modes, one fix.</b> Semantic steering (<i>“pick up the banana from the top”</i>) resolves
+                which object/sub-goal the policy targets. Motor refinement (<i>“move the bowl higher”</i>) tightens
+                execution once the target is right.
+            </div>
+
+            <div class="task">
+                <div class="grid2">
+                    <div class="cell">
+                        <div class="cap"><span>Different operators, same result</span><span class="pill">steerable</span></div>
+                        <video src="assets/different_operators_same_result.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">2×</span>
+                    </div>
+                    <div class="cell">
+                        <div class="cap"><span>OOD banana — language re-routes the policy</span><span class="pill">generalize</span></div>
+                        <video src="assets/banana_ood_3method.mp4" autoplay loop muted playsinline></video>
+                        <span class="speed">2×</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- method: IDE loop ---------- -->
+    <section id="method">
+        <div class="wrap">
+            <h2>Instruction-Driven Exploration (IDE)</h2>
+            <p class="lead">
+                Your VLA is stuck on the canonical prompt. Wiggling its joints won't help. So we hand the mic
+                to the human already standing there: they watch the rollout, and when the robot goes sideways,
+                they update the prompt <b>mid-rollout</b>. The VLA keeps generating actions; only its language
+                input changes. Then we fold those successes back into PPO — but reward is still scored against
+                the original task.
+            </p>
+
+            <div class="outer-loop-box">
+                <div class="outer-loop-header">Outer loop — PPO update <span class="muted-note">(policy weights updated on canonical reward)</span></div>
+                <div class="inner-loop-box">
+                    <div class="inner-loop-header">Inner loop — rollout with human language intervention <span class="muted-note">(frozen weights, prompt \(\tilde g_t\) may change at any timestep)</span></div>
+                    <ol class="algo algo-nested">
+                        <li><b>Initialize.</b> Start the rollout with the canonical prompt \(\tilde g \leftarrow g\) (e.g. <i>“open the top drawer and put the bowl inside”</i>).</li>
+                        <li><b>Observe.</b> At timestep \(t\), the human watches \(o_t\) and the partial trajectory \(\tau_{0:t}\).</li>
+                        <li><b>Intervene (optional).</b> If eligible and the robot is heading off, the human overwrites the prompt: \(\tilde g \leftarrow \mathrm{Human}(g, \tilde g, \tau_{0:t})\) — e.g. <i>“pull open the top drawer”</i>, then later <i>“move the bowl higher”</i>.</li>
+                        <li><b>Act.</b> VLA samples \(a_t \sim \pi_\theta(\cdot \mid o_t, \tilde g)\) and executes; append \((o_t, \tilde g, a_t)\) to \(\tau\).</li>
+                        <li><b>Repeat</b> for the rest of the horizon.</li>
+                    </ol>
+                </div>
+                <ol class="algo algo-nested outer-step" start="6">
+                    <li><b>Score under the canonical prompt.</b> \(R(\tau, g)\) — success is defined by the original task, not the intervention.</li>
+                    <li><b>Mixed-prompt PPO update.</b> Average the log-prob under both intervened and canonical prompts (Eq. 2–3): \(\ell_t(\theta) = \tfrac12 \log \pi_\theta(a_t \mid o_t, \tilde g_t) + \tfrac12 \log \pi_\theta(a_t \mid o_t, g)\). Successes lift the action likelihood under <i>both</i> — so exploration comes from \(\tilde g\), but the deployed policy stays aligned with \(g\).</li>
+                </ol>
+            </div>
+
+            <p class="lead" style="text-align:center;color:var(--muted);font-size:.95rem;">
+                Two knobs make it practical: <b>mixed backprop</b> (so the policy doesn't become dependent on the human's phrasing), and <b>adaptive intervention</b> (allow interventions in proportion to \(1 - \hat s(g)\) — low-success tasks get more help; reliable ones get left alone).
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- human intervention video ---------- -->
+    <section id="intervention-video">
+        <div class="wrap">
+            <h2>What a training rollout actually looks like<span class="sub">Human watches, re-words when the robot fumbles, otherwise stays out of the way.</span></h2>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/teaser_with_intervention.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    A successful IDE training rollout on the drawer task. The operator's typed prompt updates
+                    (~2s each) replace SpaceMouse teleoperation (~30s each) — the human is in active control for
+                    ~5% of training, versus ~75% under DAgger.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- results ---------- -->
+    <section id="results">
+        <div class="wrap">
+            <h2>IDE beats PPO and DAgger on every real-world task<span class="sub">Same SFT checkpoint, same eval protocol, same rollout / wall-clock budget.</span></h2>
+
+            <table class="results">
+                <caption>Per-task success rate (%) on real-world tasks after RL fine-tuning. (+X) is the gain over the SFT checkpoint under the canonical prompt. IDE builds the highest success rate on every task.</caption>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>SFT</th>
+                        <th>PPO</th>
+                        <th>DAgger</th>
+                        <th>PPO + IDE (ours)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>put the tape in the bowl</td>
+                        <td>20.0</td><td>30.0 (+10)</td><td>30.0 (+10)</td>
+                        <td class="ours">75.0 (+55)</td>
+                    </tr>
+                    <tr>
+                        <td>put the tape in front of the camera</td>
+                        <td>0.0</td><td>15.0 (+15)</td><td>35.0 (+35)</td>
+                        <td class="ours">60.0 (+60)</td>
+                    </tr>
+                    <tr>
+                        <td>put the donut in the bowl</td>
+                        <td>5.0</td><td>20.0 (+15)</td><td>10.0 (+10)</td>
+                        <td class="ours">55.0 (+50)</td>
+                    </tr>
+                    <tr>
+                        <td>open the top drawer and put the bowl inside</td>
+                        <td>0.0</td><td>0.0 (+0)</td><td>10.0 (+10)</td>
+                        <td class="ours">35.0 (+35)</td>
+                    </tr>
+                    <tr>
+                        <td>Average</td>
+                        <td>6.3</td><td>16.3 (+10)</td><td>22.5 (+16.2)</td>
+                        <td class="ours">56.3 (+50.0)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="takeaway">
+                <b>Sample efficiency.</b> IDE reaches these success rates with far fewer rollouts than PPO — it matches
+                DAgger within the first iteration and keeps improving, while PPO on the drawer task never leaves zero
+                because it collects no successes.
+                <br><br>
+                <b>Human effort.</b> A typed prompt takes ~2s; a SpaceMouse correction takes ~30s. Operator is in active
+                control for <b>~5%</b> of IDE training vs. <b>~75%</b> under DAgger.
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- test-time steerability & generalization ---------- -->
+    <section id="steerable">
+        <div class="wrap">
+            <h2>The trained policy stays steerable at test time<span class="sub">Diverse-prompt training keeps language as a live control interface — not just a training-time crutch.</span></h2>
+
+            <div class="grid2">
+                <div class="cell">
+                    <div class="cap"><span>OOD object montage — IDE stays robust</span><span class="pill">generalize</span></div>
+                    <video src="assets/donut_robustness_montage.mp4" autoplay loop muted playsinline></video>
+                    <span class="speed">2×</span>
+                </div>
+                <div class="cell">
+                    <div class="cap"><span>Different operators, same result</span><span class="pill">robust</span></div>
+                    <video src="assets/different_operators_same_result.mp4" autoplay loop muted playsinline></video>
+                    <span class="speed">2×</span>
+                </div>
+            </div>
+
+            <div class="takeaway">
+                On the <i>put the tape in the bowl</i> task with an unseen distractor, IDE lifts success from 10 → 50%
+                with mid-rollout correction; PPO's checkpoint <i>loses</i> 10 pp under the same corrections. IDE is
+                the only method whose test-time recovery generalizes — because it saw diverse prompts during training.
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- limitations ---------- -->
+    <section id="limitations">
+        <div class="wrap">
+            <h2>Limitations<span class="sub">Language is only as useful as the VLA's language grounding.</span></h2>
+            <p class="lead">
+                IDE inherits the language-conditioned controllability of the underlying VLA. When the arm drifts to
+                the edge of the camera view, or the object naming collides with training data (e.g. a novel object
+                the VLA insists on calling <i>“bowl”</i>), prompt updates can't always recover — operators sometimes
+                have to lean on nearby reference objects or unnatural phrasings. Stronger language grounding in the
+                base VLA would let IDE go further.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- bibtex placeholder ---------- -->
+    <section id="cite">
+        <div class="wrap">
+            <h2>Citation</h2>
+            <pre class="bib">@inproceedings{jiang2026ide,
+  title     = {Correct Me If I'm Wrong: Language Guided Exploration for VLAs},
+  author    = {Jiang, Sunshine and Marangola, John and Zhang, David and
+               Dashora, Nitish and Agrawal, Pulkit and Hong, Zhang-Wei},
+  booktitle = {Conference on Robot Learning (CoRL)},
+  year      = {2026}
+}</pre>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap">
+            Page template adapted for <a href="https://xinyunsunshine.github.io">xinyunsunshine.github.io</a>.
+        </div>
+    </footer>
+</body>
+
+</html>
