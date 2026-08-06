@@ -198,7 +198,7 @@
     <header class="hero">
         <div class="wrap">
             <h1 class="title">Correct Me If I'm Wrong</h1>
-            <div class="subtitle">Language-guided exploration for VLA post-training — the human on-site is your best exploration heuristic.</div>
+            <div class="subtitle">Language-guided exploration for VLA post-training.</div>
             <div class="authors">
                 <a href="https://xinyunsunshine.github.io">Sunshine Jiang</a><sup>1</sup>,
                 <a href="#">John Marangola</a><sup>1</sup>,
@@ -216,43 +216,44 @@
                 <a href="assets/ide_paper.pdf" target="_blank" rel="noopener">📄 Paper</a>
                 <a href="#method">🧠 Method</a>
                 <a href="#results">📊 Results</a>
+                <a href="#abstract">📝 Abstract</a>
             </div>
         </div>
     </header>
 
-    <!-- ---------- punchline ---------- -->
-    <section id="punchline" style="padding: 8px 0 18px;">
+    <!-- ---------- punchline before hero video ---------- -->
+    <section id="punchline-hero" style="padding: 8px 0 6px;">
         <div class="wrap">
             <p class="meme-punchline">
-                Stop babysitting the SpaceMouse. <b>Just talk to the robot.</b>
+                By doing real-world RL with language intervention, a VLA can learn a <b>zero-success-rate task in under an hour</b>.
             </p>
         </div>
     </section>
 
-    <!-- ---------- teaser ---------- -->
-    <section id="teaser" style="padding-top:10px;">
+    <!-- ---------- hero video: full intervention rollout ---------- -->
+    <section id="hero-video" style="padding: 8px 0 18px;">
         <div class="wrap">
-            <div class="task" style="margin-top:0;">
-                <div class="grid3-prompts">
-                    <div class="cell-prompt fail-text"><b>Canonical prompt:</b> <i>“open the top drawer and put the bowl inside”</i></div>
-                    <div class="cell-prompt ok-text"><b>Mid-rollout intervention:</b> <i>“pull open the top drawer” → “move the bowl higher” → …</i></div>
-                    <div class="cell-prompt neutral"><b>After RL fine-tuning</b> on IDE rollouts, the canonical prompt alone succeeds.</div>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/teaser_with_intervention.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    A training rollout with mid-rollout language intervention: the operator watches the robot,
+                    and when it fumbles, updates the prompt (<i>“pull open the top drawer” → “move the bowl higher”
+                    → “put the bowl inside”</i>). The VLA keeps generating actions — only its language input changes.
                 </div>
-                <div class="grid3">
-                    <div class="cell fail">
-                        <div class="cap"><span>SFT under canonical prompt</span><span class="pill">fail</span></div>
-                        <video src="assets/three_consecutive_fail.mp4" autoplay loop muted playsinline></video>
-                        <span class="speed">2×</span>
-                    </div>
-                    <div class="cell ok">
-                        <div class="cap"><span>SFT + mid-rollout language</span><span class="pill">success</span></div>
-                        <video src="assets/teaser_with_intervention.mp4" autoplay loop muted playsinline></video>
-                        <span class="speed">2×</span>
-                    </div>
-                    <div class="cell neutral">
-                        <div class="cap"><span>Training curve (drawer)</span><span class="pill">IDE ≫ PPO</span></div>
-                        <video src="assets/training_curve_drawer.mp4" autoplay loop muted playsinline></video>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------- Why is RL sample inefficient? ---------- -->
+    <section id="rl-inefficient">
+        <div class="wrap">
+            <h2>Why is RL sample inefficient?<span class="sub">RL keeps failing in the same way.</span></h2>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/three_consecutive_fail.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    RL only learns from what it collects, and the same repeated failures teach it virtually nothing.
                 </div>
             </div>
         </div>
@@ -260,75 +261,79 @@
 
     <div class="divider"></div>
 
-    <!-- ---------- abstract ---------- -->
-    <section id="abstract">
+    <!-- ---------- Failures happen, humans can't help ---------- -->
+    <section id="human-cant-help">
         <div class="wrap">
-            <h2>Abstract</h2>
-            <p class="lead">
-                Reinforcement learning is a promising framework for improving vision-language-action (VLA)
-                models through interaction, but it often struggles when the initial policy repeatedly fails
-                in the same way. Our key observation is that these models already offer a simple way for
-                humans to change what the policy attempts — through <b>language</b>. In real-world robot
-                training, humans often need to stay nearby to monitor rollouts, reset environments, and check
-                progress; while watching, a human can redirect exploration by simply revising the instruction,
-                without providing low-level actions or directly controlling the robot. We introduce
-                <b>Instruction-Driven Exploration (IDE)</b>, an interactive post-training framework that uses
-                human prompt updates to help VLAs collect more useful experience. On real-world physical
-                robots, IDE significantly improves sample efficiency over standard RL, making robot learning
-                more practical under limited data. We further show that interactive post-training makes VLAs
-                more responsive to prompt updates at test time, enabling users to guide robot behavior through
-                natural language during execution.
-            </p>
-        </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- ---------- motivation: same failure over and over ---------- -->
-    <section id="motivation">
-        <div class="wrap">
-            <h2>Standard RL keeps collecting the same failure<span class="sub">A weak SFT checkpoint gets stuck. Action noise doesn't rescue it — it just re-samples the same bad plan.</span></h2>
+            <h2>Failures happen, and humans can't do anything about it</h2>
             <div class="standalone-video">
                 <span class="speed">2×</span>
                 <video src="assets/standard_rl_fail.mp4" autoplay loop muted playsinline></video>
                 <div class="cap">
-                    Standard PPO on the canonical prompt collects near-zero reward: every rollout fails in the same way,
-                    so the policy gradient has nothing to push on. Meanwhile, a human is already right there — resetting
-                    the scene, watching the robot fumble.
+                    Instead of giving the policy hints, when the policy gets stuck the human watching can only reset
+                    and wait for the policy to try again.
                 </div>
-            </div>
-            <div class="takeaway">
-                <b>Insight.</b> The human on-site is <i>already</i> supervising. The cheapest thing they can do isn't
-                grab a SpaceMouse — it's re-word the instruction. Because the VLA is prompt-conditioned, changing the
-                prompt changes the whole rollout: a global perturbation action noise cannot produce.
             </div>
         </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ---------- language steers a frozen policy ---------- -->
-    <section id="steering">
+    <!-- ---------- Intervention helps but doesn't scale (SpaceMouse) ---------- -->
+    <section id="action-intervention">
         <div class="wrap">
-            <h2>Language alone steers a frozen policy<span class="sub">Same weights, same scene — a single reworded prompt flips fail to success.</span></h2>
+            <h2>Intervention helps RL escape from the same failure — but doesn't scale<span class="sub">Task: open the top drawer and put the bowl inside.</span></h2>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/dagger_expert_vs_novice.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    Intervening on robot control requires experienced operators. A SpaceMouse correction takes ~30s
+                    and an expert to place the end-effector precisely — novices drag the policy through failure
+                    rather than teaching it a better strategy.
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="takeaway">
-                <b>Two failure modes, one fix.</b> Semantic steering (<i>“pick up the banana from the top”</i>) resolves
-                which object/sub-goal the policy targets. Motor refinement (<i>“move the bowl higher”</i>) tightens
-                execution once the target is right.
+    <div class="divider"></div>
+
+    <!-- ---------- Language intervention works and scales ---------- -->
+    <section id="language-scales">
+        <div class="wrap">
+            <h2>Language intervention works and scales<span class="sub">Task: open the top drawer and put the bowl inside.</span></h2>
+
+            <div class="task" style="margin-top:8px;">
+                <h3 style="text-align:center;margin-top:8px;">Correct a high-level semantic failure</h3>
+                <div class="standalone-video">
+                    <span class="speed">2×</span>
+                    <video src="assets/high_level_control.mp4" autoplay loop muted playsinline></video>
+                    <div class="cap">
+                        The policy targets the wrong object or sub-goal; a short prompt naming the target
+                        (e.g. <i>“pull open the top drawer”</i>) re-routes it.
+                    </div>
+                </div>
             </div>
 
             <div class="task">
-                <div class="grid2">
-                    <div class="cell">
-                        <div class="cap"><span>Different operators, same result</span><span class="pill">steerable</span></div>
-                        <video src="assets/different_operators_same_result.mp4" autoplay loop muted playsinline></video>
-                        <span class="speed">2×</span>
+                <h3 style="text-align:center;">Correct a low-level motor control failure</h3>
+                <div class="standalone-video">
+                    <span class="speed">2×</span>
+                    <video src="assets/low_level_control.mp4" autoplay loop muted playsinline></video>
+                    <div class="cap">
+                        The target is correct but execution is off — a motor-cue prompt
+                        (e.g. <i>“move the bowl higher”</i>) tightens approach angle and contact height without any weight update.
                     </div>
-                    <div class="cell">
-                        <div class="cap"><span>OOD banana — language re-routes the policy</span><span class="pill">generalize</span></div>
-                        <video src="assets/banana_ood_3method.mp4" autoplay loop muted playsinline></video>
-                        <span class="speed">2×</span>
+                </div>
+            </div>
+
+            <div class="task">
+                <h3 style="text-align:center;">Different operators, same result</h3>
+                <div class="standalone-video">
+                    <span class="speed">2×</span>
+                    <video src="assets/different_operators_same_result.mp4" autoplay loop muted playsinline></video>
+                    <div class="cap">
+                        Three operators of varying robotics experience issue their own corrections on the same
+                        checkpoint. The success rate is robust to operator choice — the policy is not overfit
+                        to any one person's phrasing.
                     </div>
                 </div>
             </div>
@@ -340,7 +345,7 @@
     <!-- ---------- method: IDE loop ---------- -->
     <section id="method">
         <div class="wrap">
-            <h2>Instruction-Driven Exploration (IDE)</h2>
+            <h2>Guided by intervention, learn to succeed without intervention<span class="sub">Instruction-Driven Exploration (IDE): human re-writes the prompt mid-rollout; PPO backprops through both intervened and canonical prompts.</span></h2>
             <p class="lead">
                 Your VLA is stuck on the canonical prompt. Wiggling its joints won't help. So we hand the mic
                 to the human already standing there: they watch the rollout, and when the robot goes sideways,
@@ -367,6 +372,17 @@
                 </ol>
             </div>
 
+            <div class="standalone-video">
+                <video src="assets/ide_pipeline_build.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    The pipeline animation: a rollout on the canonical prompt \(p_g\) is redirected mid-way by
+                    interventions \(p_4, p_{20}\) into a successful trajectory. IDE then does a mixed PPO update —
+                    the policy gradient flows through both the <b style="color:#268e88;">intervened prompts</b>
+                    (teal path) and the <b style="color:#8a5cd6;">original prompt</b> (purple path), so
+                    exploration comes from \(p_t\) but the deployed policy stays aligned with \(p_g\).
+                </div>
+            </div>
+
             <p class="lead" style="text-align:center;color:var(--muted);font-size:.95rem;">
                 Two knobs make it practical: <b>mixed backprop</b> (so the policy doesn't become dependent on the human's phrasing), and <b>adaptive intervention</b> (allow interventions in proportion to \(1 - \hat s(g)\) — low-success tasks get more help; reliable ones get left alone).
             </p>
@@ -375,17 +391,21 @@
 
     <div class="divider"></div>
 
-    <!-- ---------- human intervention video ---------- -->
-    <section id="intervention-video">
+    <!-- ---------- results: sample efficiency vs PPO ---------- -->
+    <section id="results">
         <div class="wrap">
-            <h2>What a training rollout actually looks like<span class="sub">Human watches, re-words when the robot fumbles, otherwise stays out of the way.</span></h2>
+            <h2>IDE improves sample efficiency<span class="sub">Consistently beats PPO.</span></h2>
+
+            <p class="meme-punchline">
+                By doing real-world RL with language intervention, a VLA can learn a <b>zero-success-rate task in under an hour</b>.
+            </p>
+
             <div class="standalone-video">
-                <span class="speed">2×</span>
-                <video src="assets/teaser_with_intervention.mp4" autoplay loop muted playsinline></video>
+                <video src="assets/training_curve_drawer.mp4" autoplay loop muted playsinline></video>
                 <div class="cap">
-                    A successful IDE training rollout on the drawer task. The operator's typed prompt updates
-                    (~2s each) replace SpaceMouse teleoperation (~30s each) — the human is in active control for
-                    ~5% of training, versus ~75% under DAgger.
+                    Task: <i>open the top drawer and put the bowl inside</i>. PPO stays near zero — it never
+                    collects a successful rollout. IDE reaches non-trivial success within the first iteration and
+                    keeps improving.
                 </div>
             </div>
         </div>
@@ -393,13 +413,13 @@
 
     <div class="divider"></div>
 
-    <!-- ---------- results ---------- -->
-    <section id="results">
+    <!-- ---------- results: 4x DAgger ---------- -->
+    <section id="results-dagger">
         <div class="wrap">
-            <h2>IDE beats PPO and DAgger on every real-world task<span class="sub">Same SFT checkpoint, same eval protocol, same rollout / wall-clock budget.</span></h2>
+            <h2>IDE improves sample efficiency<span class="sub">4× the performance of action intervention (DAgger).</span></h2>
 
             <table class="results">
-                <caption>Per-task success rate (%) on real-world tasks after RL fine-tuning. (+X) is the gain over the SFT checkpoint under the canonical prompt. IDE builds the highest success rate on every task.</caption>
+                <caption>Per-task success rate (%) after RL fine-tuning; (+X) is the gain over the SFT checkpoint under the canonical prompt. Action intervention is implemented as DAgger.</caption>
                 <thead>
                     <tr>
                         <th>Task</th>
@@ -439,73 +459,81 @@
             </table>
 
             <div class="takeaway">
-                <b>Sample efficiency.</b> IDE reaches these success rates with far fewer rollouts than PPO — it matches
-                DAgger within the first iteration and keeps improving, while PPO on the drawer task never leaves zero
-                because it collects no successes.
-                <br><br>
-                <b>Human effort.</b> A typed prompt takes ~2s; a SpaceMouse correction takes ~30s. Operator is in active
-                control for <b>~5%</b> of IDE training vs. <b>~75%</b> under DAgger.
+                A typed prompt takes ~2s; a SpaceMouse correction takes ~30s. The operator is in active control
+                for <b>~5%</b> of IDE training vs. <b>~75%</b> under DAgger — for a policy that reaches
+                <b>4×</b> the average success rate.
             </div>
         </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ---------- test-time steerability & generalization ---------- -->
-    <section id="steerable">
+    <!-- ---------- IDE improves robustness ---------- -->
+    <section id="robustness">
         <div class="wrap">
-            <h2>The trained policy stays steerable at test time<span class="sub">Diverse-prompt training keeps language as a live control interface — not just a training-time crutch.</span></h2>
-
-            <div class="grid2">
-                <div class="cell">
-                    <div class="cap"><span>OOD object montage — IDE stays robust</span><span class="pill">generalize</span></div>
-                    <video src="assets/donut_robustness_montage.mp4" autoplay loop muted playsinline></video>
-                    <span class="speed">2×</span>
+            <h2>IDE improves robustness<span class="sub">Robust recovery from failure.</span></h2>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/donut_robustness_montage.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    The IDE-trained policy recovers from a wider range of failure modes than the baselines —
+                    it saw diverse prompts during training, so at test time it stays responsive to language
+                    corrections instead of collapsing to a single memorized trajectory.
                 </div>
-                <div class="cell">
-                    <div class="cap"><span>Different operators, same result</span><span class="pill">robust</span></div>
-                    <video src="assets/different_operators_same_result.mp4" autoplay loop muted playsinline></video>
-                    <span class="speed">2×</span>
-                </div>
-            </div>
-
-            <div class="takeaway">
-                On the <i>put the tape in the bowl</i> task with an unseen distractor, IDE lifts success from 10 → 50%
-                with mid-rollout correction; PPO's checkpoint <i>loses</i> 10 pp under the same corrections. IDE is
-                the only method whose test-time recovery generalizes — because it saw diverse prompts during training.
             </div>
         </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ---------- limitations ---------- -->
-    <section id="limitations">
+    <!-- ---------- closing punchline ---------- -->
+    <section id="closing" style="padding: 8px 0 18px;">
         <div class="wrap">
-            <h2>Limitations<span class="sub">Language is only as useful as the VLA's language grounding.</span></h2>
-            <p class="lead">
-                IDE inherits the language-conditioned controllability of the underlying VLA. When the arm drifts to
-                the edge of the camera view, or the object naming collides with training data (e.g. a novel object
-                the VLA insists on calling <i>“bowl”</i>), prompt updates can't always recover — operators sometimes
-                have to lean on nearby reference objects or unnatural phrasings. Stronger language grounding in the
-                base VLA would let IDE go further.
+            <p class="meme-punchline">
+                Practical real-world RL <b>under a tight data budget</b>.
             </p>
         </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ---------- bibtex placeholder ---------- -->
-    <section id="cite">
+    <!-- ---------- abstract ---------- -->
+    <section id="abstract">
         <div class="wrap">
-            <h2>Citation</h2>
-            <pre class="bib">@inproceedings{jiang2026ide,
-  title     = {Correct Me If I'm Wrong: Language Guided Exploration for VLAs},
-  author    = {Jiang, Sunshine and Marangola, John and Zhang, David and
-               Dashora, Nitish and Agrawal, Pulkit and Hong, Zhang-Wei},
-  booktitle = {Conference on Robot Learning (CoRL)},
-  year      = {2026}
-}</pre>
+            <h2>Abstract</h2>
+            <p class="lead">
+                Reinforcement learning is a promising framework for improving vision-language-action (VLA)
+                models through interaction, but it often struggles when the initial policy repeatedly fails
+                in the same way. Our key observation is that these models already offer a simple way for
+                humans to change what the policy attempts — through <b>language</b>. In real-world robot
+                training, humans often need to stay nearby to monitor rollouts, reset environments, and check
+                progress; while watching, a human can redirect exploration by simply revising the instruction,
+                without providing low-level actions or directly controlling the robot. We introduce
+                <b>Instruction-Driven Exploration (IDE)</b>, an interactive post-training framework that uses
+                human prompt updates to help VLAs collect more useful experience. On real-world physical
+                robots, IDE significantly improves sample efficiency over standard RL, making robot learning
+                more practical under limited data. We further show that interactive post-training makes VLAs
+                more responsive to prompt updates at test time, enabling users to guide robot behavior through
+                natural language during execution.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ---------- IDE improves generalization (last slide) ---------- -->
+    <section id="generalization">
+        <div class="wrap">
+            <h2>Applicable to diverse objects and layouts<span class="sub">IDE improves generalization — PPO and DAgger do not.</span></h2>
+            <div class="standalone-video">
+                <span class="speed">2×</span>
+                <video src="assets/banana_ood_3method.mp4" autoplay loop muted playsinline></video>
+                <div class="cap">
+                    OOD banana on the <i>put the tape in the bowl</i> task. Given the same mid-rollout correction,
+                    only IDE re-routes to the banana and completes the deposit; PPO drives toward an OOD
+                    end-effector pose, and DAgger's recovery is bound to its narrow training scene.
+                </div>
+            </div>
         </div>
     </section>
 
