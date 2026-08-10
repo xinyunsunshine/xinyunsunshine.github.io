@@ -253,7 +253,7 @@
 <body>
     <header class="hero">
         <div class="wrap">
-            <h1 class="title">Prompt Driven Exploration</h1>
+            <h1 class="title"><span style="color:var(--accent);">P</span>rompt <span style="color:var(--accent);">D</span>riven <span style="color:var(--accent);">E</span>xploration for RL finetuning VLA</h1>
             <div class="subtitle">Bootstrapping RL from zero-reward starts by exploring in prompt space</div>
             <div class="authors">
                 <a href="https://xinyunsunshine.github.io">Sunshine Jiang</a><sup>1,3</sup>,
@@ -286,6 +286,9 @@
             <p class="meme-punchline">
                 Stop tuning the algorithms. <b>Change the prompts.</b>
             </p>
+            <p class="meme-punchline" style="font-size:1.25rem;font-weight:600;padding-top:0;">
+                By doing real-world RL with PDE, a VLA can learn a task in <b>under an hour</b>.
+            </p>
         </div>
     </section>
 
@@ -293,12 +296,11 @@
     <section id="teaser" style="padding-top:10px;">
         <div class="wrap">
             <div class="task" style="margin-top:0;">
-                <div class="grid3 grid3-prompts" style="margin-bottom:10px;">
+                <div class="grid3 grid3-prompts" style="grid-template-columns: 1fr 1fr; margin-bottom:10px;">
                     <div class="cell-prompt fail-text">Original: <i>“put the green container on the bottom rack”</i></div>
                     <div class="cell-prompt ok-text">PDE-discovered: <i>“put the green container on the bottom rack <b>completely</b>”</i></div>
-                    <div class="cell-prompt neutral"><b>PDE bootstraps RL from low initial success</b></div>
                 </div>
-                <div class="grid3">
+                <div class="grid3" style="grid-template-columns: 1fr 1fr;">
                     <div class="cell fail">
                         <div class="cap"><span>Original prompt</span><span class="pill">fail</span></div>
                         <video src="assets/container_rack_fail.mp4" autoplay loop muted playsinline></video>
@@ -309,9 +311,10 @@
                         <video src="assets/container_rack_success.mp4" autoplay loop muted playsinline></video>
                         <span class="speed">2×</span>
                     </div>
-                    <div class="cell neutral">
-                        <video src="assets/training_curve.mp4" autoplay loop muted playsinline></video>
-                    </div>
+                </div>
+                <div class="cell-prompt neutral" style="margin: 14px 0 10px; text-align:center;"><b>PDE bootstraps RL from low initial success</b></div>
+                <div class="cell neutral">
+                    <video src="assets/training_curve.mp4" autoplay loop muted playsinline></video>
                 </div>
             </div>
         </div>

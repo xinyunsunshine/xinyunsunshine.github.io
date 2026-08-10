@@ -214,9 +214,7 @@
             </div>
             <div class="links">
                 <a href="assets/ide_paper.pdf" target="_blank" rel="noopener">📄 Paper</a>
-                <a href="#method">🧠 Method</a>
-                <a href="#results">📊 Results</a>
-                <a href="#abstract">📝 Abstract</a>
+                <a href="#" style="opacity:0.6;cursor:not-allowed;" onclick="event.preventDefault();">💻 Code — coming soon</a>
             </div>
         </div>
     </header>
@@ -353,24 +351,6 @@
                 input changes. Then we fold those successes back into PPO — but reward is still scored against
                 the original task.
             </p>
-
-            <div class="outer-loop-box">
-                <div class="outer-loop-header">Outer loop — PPO update <span class="muted-note">(policy weights updated on canonical reward)</span></div>
-                <div class="inner-loop-box">
-                    <div class="inner-loop-header">Inner loop — rollout with human language intervention <span class="muted-note">(frozen weights, prompt \(\tilde g_t\) may change at any timestep)</span></div>
-                    <ol class="algo algo-nested">
-                        <li><b>Initialize.</b> Start the rollout with the canonical prompt \(\tilde g \leftarrow g\) (e.g. <i>“open the top drawer and put the bowl inside”</i>).</li>
-                        <li><b>Observe.</b> At timestep \(t\), the human watches \(o_t\) and the partial trajectory \(\tau_{0:t}\).</li>
-                        <li><b>Intervene (optional).</b> If eligible and the robot is heading off, the human overwrites the prompt: \(\tilde g \leftarrow \mathrm{Human}(g, \tilde g, \tau_{0:t})\) — e.g. <i>“pull open the top drawer”</i>, then later <i>“move the bowl higher”</i>.</li>
-                        <li><b>Act.</b> VLA samples \(a_t \sim \pi_\theta(\cdot \mid o_t, \tilde g)\) and executes; append \((o_t, \tilde g, a_t)\) to \(\tau\).</li>
-                        <li><b>Repeat</b> for the rest of the horizon.</li>
-                    </ol>
-                </div>
-                <ol class="algo algo-nested outer-step" start="6">
-                    <li><b>Score under the canonical prompt.</b> \(R(\tau, g)\) — success is defined by the original task, not the intervention.</li>
-                    <li><b>Mixed-prompt PPO update.</b> Average the log-prob under both intervened and canonical prompts (Eq. 2–3): \(\ell_t(\theta) = \tfrac12 \log \pi_\theta(a_t \mid o_t, \tilde g_t) + \tfrac12 \log \pi_\theta(a_t \mid o_t, g)\). Successes lift the action likelihood under <i>both</i> — so exploration comes from \(\tilde g\), but the deployed policy stays aligned with \(g\).</li>
-                </ol>
-            </div>
 
             <div class="standalone-video">
                 <video src="assets/ide_pipeline_build.mp4" autoplay loop muted playsinline></video>
