@@ -1,0 +1,243 @@
+{
+ "tasks": [
+  {
+   "id": "goal_t0",
+   "name": "open the bottom drawer of the cabinet",
+   "goal": "open the bottom drawer of the cabinet",
+   "init_sr": 0,
+   "best_sr": 0.5,
+   "scene": "tasks/goal_t0/scene.glb",
+   "geom_index": "tasks/goal_t0/geom_index.json",
+   "cameras": "tasks/goal_t0/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "open the bottom drawer of the cabinet",
+     "label": "canonical",
+     "traj": "tasks/goal_t0/traj/goal_t0_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p0",
+     "text": "move to the bottom drawer handle, close your gripper completely around it, and pull with steady force until the drawer opens",
+     "label": "optimized",
+     "traj": "tasks/goal_t0/traj/goal_t0_p0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p1",
+     "text": "focus on the bottom drawer handle, position gripper perpendicular to handle, squeeze firmly, and pull the drawer out completely",
+     "label": "optimized",
+     "traj": "tasks/goal_t0/traj/goal_t0_p1",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "identify the bottom drawer handle, get a firm grip by closing grippers fully, and pull the drawer open with one continuous motion",
+     "label": "optimized",
+     "traj": "tasks/goal_t0/traj/goal_t0_p2",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "Grasp the bottom drawer handle with full gripper closure, then pull straight back with constant force while maintaining grip until the drawer is fully open",
+     "label": "optimized",
+     "traj": "tasks/goal_t0/traj/goal_t0_p3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p4",
+     "text": "Securely close grippers on the bottom drawer handle, then pull directly backward in one fluid motion without releasing grip until the drawer opens completely",
+     "label": "optimized",
+     "traj": "tasks/goal_t0/traj/goal_t0_p4",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/goal_t0/thumb.png",
+   "view": {
+    "dir": [
+     0.2,
+     1,
+     0.65
+    ],
+    "dist": 1.6
+   }
+  },
+  {
+   "id": "goal_t5",
+   "name": "Push the cream cheese to the front of the stove",
+   "goal": "Push the cream cheese to the front of the stove",
+   "init_sr": 0,
+   "best_sr": 0.1,
+   "scene": "tasks/goal_t5/scene.glb",
+   "geom_index": "tasks/goal_t5/geom_index.json",
+   "cameras": "tasks/goal_t5/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "Push the cream cheese to the front of the stove",
+     "label": "canonical",
+     "traj": "tasks/goal_t5/traj/goal_t5_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p1",
+     "text": "push the cream cheese to the front edge of the stove",
+     "label": "optimized",
+     "traj": "tasks/goal_t5/traj/goal_t5_p1",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "slide the cream cheese toward you on the stove",
+     "label": "optimized",
+     "traj": "tasks/goal_t5/traj/goal_t5_p2",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "move the cream cheese to the near edge of the stovetop",
+     "label": "optimized",
+     "traj": "tasks/goal_t5/traj/goal_t5_p3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/goal_t5/thumb.png",
+   "view": {
+    "dir": [
+     0.2,
+     1,
+     0.65
+    ],
+    "dist": 1.6
+   }
+  },
+  {
+   "id": "goal_t9",
+   "name": "Put the cream cheese on the rack",
+   "goal": "Put the cream cheese on the rack",
+   "init_sr": 0,
+   "best_sr": 0,
+   "scene": "tasks/goal_t9/scene.glb",
+   "geom_index": "tasks/goal_t9/geom_index.json",
+   "cameras": "tasks/goal_t9/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "Put the cream cheese on the rack",
+     "label": "canonical",
+     "traj": "tasks/goal_t9/traj/goal_t9_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p0",
+     "text": "Pick up the cream cheese container firmly, move it in a straight line to the brown rack, and lower it directly onto the rack with a controlled downward motion",
+     "label": "optimized",
+     "traj": "tasks/goal_t9/traj/goal_t9_p0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p1",
+     "text": "Grasp the white cream cheese package securely, keep it elevated during transfer to the brown rack, and place it on the front section of the rack",
+     "label": "optimized",
+     "traj": "tasks/goal_t9/traj/goal_t9_p1",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "pick up the cream cheese and place it on the brown rack",
+     "label": "optimized",
+     "traj": "tasks/goal_t9/traj/goal_t9_p2",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 4,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "Pick up the cream cheese, hold it steady while moving to the brown rack, and complete the placement by lowering it onto the rack",
+     "label": "optimized",
+     "traj": "tasks/goal_t9/traj/goal_t9_p3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p4",
+     "text": "Lift the cream cheese, navigate to the brown rack, align it properly, and place it with a downward motion",
+     "label": "optimized",
+     "traj": "tasks/goal_t9/traj/goal_t9_p4",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/goal_t9/thumb.png",
+   "view": {
+    "dir": [
+     0.2,
+     1,
+     0.65
+    ],
+    "dist": 1.6
+   }
+  }
+ ]
+}
