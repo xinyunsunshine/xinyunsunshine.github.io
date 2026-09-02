@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LIBERO-PRO · pi0.5 prompt → behavior (3D)</title>
+  <link rel="stylesheet" href="viewer.css?v=5" />
+  <style>
+    /* Give the widget a definite height so the side panel scrolls internally and the
+       bottom control bar (speed / cameras / reset) stays pinned in view. Without this the
+       widget grows to content height and the controls fall below the fold. */
+    html, body { height: 100%; margin: 0; background: #0e1116; }
+    #viewer { height: 100vh; width: 100%; }
+  </style>
+  <!-- Vendored three.js r160 — no bundler, no CDN, works fully offline. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.js",
+      "three/addons/": "./vendor/addons/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="viewer" class="lrv-root"></div>
+  <script type="module">
+    import { LiberoRobotViewer } from "./viewer.js?v=5";
+    window.__lrv = new LiberoRobotViewer(document.getElementById("viewer"), "./data/manifest.json");
+  </script>
+</body>
+</html>
