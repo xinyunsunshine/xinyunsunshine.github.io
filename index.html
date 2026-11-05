@@ -10,11 +10,16 @@
     <meta name="google-site-verification" content="sfrwMI6kyZwt0G5lqJ5A34wypCN7eaDha0_9CSBx6_o" />
 
     <style>
-        #invar .invar-thumb-film { display: block; width: 320px; height: 180px; overflow: hidden; background: #121214; }
-        #invar .invar-thumb-grid { display: grid; width: 100%; height: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 2px; transform-origin: center; }
+        #invar .invar-thumb-film { position: relative; display: block; width: 320px; height: 180px; overflow: hidden; background: #121214; }
+        #invar .invar-thumb-grid { display: grid; width: 100%; height: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 2px; transform-origin: center; transition: opacity .45s ease; }
         #invar .invar-thumb-grid video { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; background: #121214; }
-        #invar .invar-thumb-intro { animation: invar-thumb-reveal 7.2s ease-in-out both; animation-play-state: paused; }
-        @keyframes invar-thumb-reveal { 0%, 80% { transform: scale(3); } 100% { transform: scale(1); } }
+        #invar .invar-thumb-intro { animation: invar-thumb-reveal 9.2s ease-in-out both; animation-play-state: paused; }
+        @keyframes invar-thumb-reveal { 0%, 62.6087% { transform: scale(3); } 78.2609%, 100% { transform: scale(1); } }
+        #invar .invar-thumb-attention { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 4px; opacity: 0; transition: opacity .45s ease; background: #121214; }
+        #invar .invar-thumb-attention video { display: block; width: 100%; height: auto; object-fit: contain; }
+        #invar .invar-thumb-film.show-attention .invar-thumb-grid { opacity: 0; }
+        #invar .invar-thumb-film.show-attention .invar-thumb-attention { opacity: 1; }
+        @media (prefers-reduced-motion: reduce) { #invar .invar-thumb-grid, #invar .invar-thumb-attention { transition: none; } }
         @media (prefers-reduced-motion: reduce) { #invar .invar-thumb-intro { animation: none; } }
     </style>
 </head>
@@ -125,7 +130,10 @@
       <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-tape.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-tape.mp4" aria-label="Tape grasp"></video>
       <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/robust-bottles.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/robust-bottles.mp4" aria-label="Bottles into a bin in another scene"></video>
       <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-hammer.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-hammer.mp4" aria-label="Hammer grasp"></video>
-    </span></span>
+    </span><span class="invar-thumb-attention" aria-hidden="true">
+                        <video data-playback-rate="2" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/attention-robot.jpg?v=20261103-4" src="https://xinyunsunshine.github.io/INVAR/assets/story/attention-robot.mp4?v=20261103-4" aria-label="Spray-bottle grasping: RGB, DINOv3, CAIP, and INVAR attention comparison"></video>
+                        <video data-playback-rate="2" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/attn-bottles.jpg?v=20261103-4" src="https://xinyunsunshine.github.io/INVAR/assets/story/attn-bottles.mp4?v=20261103-4" aria-label="Bimanual manipulation: RGB, DINOv3, CAIP, and INVAR attention comparison"></video>
+                    </span></span>
                 </a>
                 <a href="https://xinyunsunshine.github.io/INVAR/" class="research-proj-title">
                     INVAR: Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real
@@ -406,40 +414,41 @@
     <script>
     (() => {
         const grid = document.getElementById('invar-thumb-grid');
+        const film = grid.parentElement;
         const center = document.getElementById('invar-thumb-center');
-        const videos = [...grid.querySelectorAll('video')];
+        const attention = film.querySelector('.invar-thumb-attention');
+        const gridVideos = [...grid.querySelectorAll('video')];
+        const attentionVideos = [...attention.querySelectorAll('video')];
         const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
         let visible = false;
         let introReady = false;
+        let showingAttention = false;
         function updatePlayback() {
             const play = visible && !document.hidden && !reducedMotion.matches;
-            grid.style.animationPlayState = play && introReady ? 'running' : 'paused';
-            videos.forEach(video => {
-                video.playbackRate = Number(video.dataset.playbackRate || 3);
-                if (play) video.play().catch(() => {});
-                else video.pause();
+            grid.style.animationPlayState = play && introReady && !showingAttention ? 'running' : 'paused';
+            [[gridVideos, !showingAttention], [attentionVideos, showingAttention]].forEach(([videos, active]) => {
+                videos.forEach(video => {
+                    video.playbackRate = Number(video.dataset.playbackRate || 3);
+                    if (play && active) video.play().catch(() => {});
+                    else video.pause();
+                });
             });
         }
-        center.addEventListener('playing', () => { introReady = true; updatePlayback(); }, {once: true});
-        function showPouringTile() {
-            const source = 'https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/invar-pour.mp4';
-            if (center.getAttribute('src') === source) return;
-            const resumeAt = center.currentTime * 2;
-            center.dataset.playbackRate = '3';
-            center.poster = source.replace('.mp4', '.jpg');
-            center.src = source;
-            center.addEventListener('loadedmetadata', () => {
-                if (Number.isFinite(center.duration) && center.duration > 0) center.currentTime = resumeAt % center.duration;
-                updatePlayback();
-            }, {once: true});
-            center.load();
+        function showAttention() {
+            if (showingAttention) return;
+            showingAttention = true;
+            film.classList.add('show-attention');
+            grid.setAttribute('aria-hidden', 'true');
+            attention.removeAttribute('aria-hidden');
+            updatePlayback();
         }
+        center.addEventListener('playing', () => { introReady = true; updatePlayback(); }, {once: true});
         grid.addEventListener('animationend', event => {
-            if (event.target === grid && event.animationName === 'invar-thumb-reveal') showPouringTile();
+            if (event.target === grid && event.animationName === 'invar-thumb-reveal') showAttention();
         });
-        if (reducedMotion.matches) showPouringTile();
-        reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) showPouringTile(); updatePlayback(); });
-        new IntersectionObserver(entries => { visible = entries[0].isIntersecting; updatePlayback(); }, {threshold: .15}).observe(grid.parentElement);
+        if (reducedMotion.matches) showAttention();
+        reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) showAttention(); updatePlayback(); });
+        new IntersectionObserver(entries => { visible = entries[0].isIntersecting; updatePlayback(); }, {threshold: .15}).observe(film);
         document.addEventListener('visibilitychange', updatePlayback);
     })();
     </script>
