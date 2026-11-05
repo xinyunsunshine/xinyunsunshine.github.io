@@ -8,6 +8,15 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <title> Sunshine (Xinyun) Jiang </title>
     <meta name="google-site-verification" content="sfrwMI6kyZwt0G5lqJ5A34wypCN7eaDha0_9CSBx6_o" />
+
+    <style>
+        #invar .invar-thumb-film { display: block; width: 320px; height: 180px; overflow: hidden; background: #121214; }
+        #invar .invar-thumb-grid { display: grid; width: 100%; height: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 2px; transform-origin: center; }
+        #invar .invar-thumb-grid video { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; background: #121214; }
+        #invar .invar-thumb-intro { animation: invar-thumb-reveal 7.2s ease-in-out both; animation-play-state: paused; }
+        @keyframes invar-thumb-reveal { 0%, 80% { transform: scale(3); } 100% { transform: scale(1); } }
+        @media (prefers-reduced-motion: reduce) { #invar .invar-thumb-intro { animation: none; } }
+    </style>
 </head>
 
 <body>
@@ -106,11 +115,17 @@
             <h1>Research</h1>
             <div id="invar">
                 <a href="https://xinyunsunshine.github.io/INVAR/" style="height: 10em;" class="research-thumb" aria-label="INVAR project website">
-                    <video width="320" height="180" style="object-fit: cover;" autoplay loop muted playsinline preload="metadata"
-                        poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-spray.jpg"
-                        aria-label="INVAR policy grasping a spray bottle on a real robot">
-                        <source src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-spray.mp4" type="video/mp4">
-                    </video>
+                    <span class="invar-thumb-film"><span id="invar-thumb-grid" class="invar-thumb-grid invar-thumb-intro">
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-spray.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-spray.mp4" aria-label="Spray-bottle grasp"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/invar-bottles.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/invar-bottles.mp4?v=20261020-2" aria-label="Bottles into a bin"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-glass.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-glass.mp4" aria-label="Wine-glass grasp"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-watering.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-watering.mp4" aria-label="Watering-can grasp"></video>
+      <video id="invar-thumb-center"  data-playback-rate="1" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/wine-pour-sim-real.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/wine-pour-sim-real.mp4" aria-label="Wine pouring with a sliding comparison between the real robot and simulation"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/invar-mug.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/invar-mug.mp4" aria-label="Flip a mug"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-tape.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-tape.mp4" aria-label="Tape grasp"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/robust-bottles.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/robust-bottles.mp4" aria-label="Bottles into a bin in another scene"></video>
+      <video  data-playback-rate="3" muted loop playsinline preload="metadata" poster="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-hammer.jpg" src="https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/grasp-hammer.mp4" aria-label="Hammer grasp"></video>
+    </span></span>
                 </a>
                 <a href="https://xinyunsunshine.github.io/INVAR/" class="research-proj-title">
                     INVAR: Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real
@@ -387,6 +402,47 @@
     </div>
     <!-- <script src="js/pixi.min.js"></script> -->
     <!-- <script src="js/profile-pic.js"></script> -->
+
+    <script>
+    (() => {
+        const grid = document.getElementById('invar-thumb-grid');
+        const center = document.getElementById('invar-thumb-center');
+        const videos = [...grid.querySelectorAll('video')];
+        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+        let visible = false;
+        let introReady = false;
+        function updatePlayback() {
+            const play = visible && !document.hidden && !reducedMotion.matches;
+            grid.style.animationPlayState = play && introReady ? 'running' : 'paused';
+            videos.forEach(video => {
+                video.playbackRate = Number(video.dataset.playbackRate || 3);
+                if (play) video.play().catch(() => {});
+                else video.pause();
+            });
+        }
+        center.addEventListener('playing', () => { introReady = true; updatePlayback(); }, {once: true});
+        function showPouringTile() {
+            const source = 'https://xinyunsunshine.github.io/INVAR/assets/story/title-tiles/invar-pour.mp4';
+            if (center.getAttribute('src') === source) return;
+            const resumeAt = center.currentTime * 2;
+            center.dataset.playbackRate = '3';
+            center.poster = source.replace('.mp4', '.jpg');
+            center.src = source;
+            center.addEventListener('loadedmetadata', () => {
+                if (Number.isFinite(center.duration) && center.duration > 0) center.currentTime = resumeAt % center.duration;
+                updatePlayback();
+            }, {once: true});
+            center.load();
+        }
+        grid.addEventListener('animationend', event => {
+            if (event.target === grid && event.animationName === 'invar-thumb-reveal') showPouringTile();
+        });
+        if (reducedMotion.matches) showPouringTile();
+        reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) showPouringTile(); updatePlayback(); });
+        new IntersectionObserver(entries => { visible = entries[0].isIntersecting; updatePlayback(); }, {threshold: .15}).observe(grid.parentElement);
+        document.addEventListener('visibilitychange', updatePlayback);
+    })();
+    </script>
 </body>
 
 </html>
