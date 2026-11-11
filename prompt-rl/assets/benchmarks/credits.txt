@@ -1,0 +1,6 @@
+ManiSkill task images: stills from RLinf's official ManiSkill plate25 demonstration. Used to illustrate benchmark environments, not PDE policy results.
+Source: https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/maniskill.html
+Video: https://raw.githubusercontent.com/RLinf/misc/main/pic/embody.mp4
+Physical Intelligence icon: https://www.pi.website/icon.png
+NVIDIA logo: official NVIDIA developer site structured metadata.
+KaTeX 0.19.0: MIT license, vendored under vendor/katex.
