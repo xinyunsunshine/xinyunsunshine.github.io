@@ -1,0 +1,496 @@
+{
+ "tasks": [
+  {
+   "id": "microwave",
+   "name": "close the microwave",
+   "goal": "close the microwave",
+   "init_sr": "0.0",
+   "best_sr": "0.33",
+   "scene": "tasks/microwave/scene.glb",
+   "geom_index": "tasks/microwave/geom_index.json",
+   "cameras": "tasks/microwave/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "close the microwave",
+     "label": "canonical",
+     "traj": "tasks/microwave/traj/mw_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p0",
+     "text": "push the microwave door until it clicks",
+     "label": "optimized",
+     "traj": "tasks/microwave/traj/mw_p0",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 1,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p1",
+     "text": "swing the microwave door shut",
+     "label": "optimized",
+     "traj": "tasks/microwave/traj/mw_p1",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "slide the microwave door closed",
+     "label": "optimized",
+     "traj": "tasks/microwave/traj/mw_p2",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 1,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "push the microwave door all the way",
+     "label": "optimized",
+     "traj": "tasks/microwave/traj/mw_p3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p4",
+     "text": "do not close the cabinet - close microwave",
+     "label": "optimized",
+     "traj": "tasks/microwave/traj/mw_p4",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 1,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/microwave/thumb.png"
+  },
+  {
+   "id": 2,
+   "name": "turn on the stove and put the moka pot on it",
+   "goal": "turn on the stove and put the moka pot on it",
+   "scene": "tasks/task02_moka/scene.glb",
+   "geom_index": "tasks/task02_moka/geom_index.json",
+   "cameras": "tasks/task02_moka/cameras.json",
+   "prompts": [
+    {
+     "id": "canonical",
+     "label": "canonical",
+     "text": "turn on the stove and put the moka pot on it",
+     "traj": "tasks/task02_moka/traj/canonical",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 3,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false,
+     "note": "pi0.5 on the ORIGINAL (unoptimized) task instruction — shown here failing (it lifts the moka pot but doesn't place it); the optimized prompts fix this."
+    },
+    {
+     "label": "working",
+     "sr": 0.6,
+     "source": "gpt-5.4",
+     "iter": 2,
+     "id": "w0",
+     "text": "turn on the stove burner and move the moka pot onto the burner",
+     "traj": "tasks/task02_moka/traj/w0",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 5,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "working",
+     "sr": 0.5,
+     "source": "gpt-5.4",
+     "iter": 1,
+     "id": "w1",
+     "text": "turn on the stove burner and move the moka pot onto it",
+     "traj": "tasks/task02_moka/traj/w1",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 3,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "working",
+     "sr": 0.5,
+     "source": "gpt-5.4",
+     "iter": 4,
+     "id": "w2",
+     "text": "turn on the stove burner and place the moka pot flat on the burner",
+     "traj": "tasks/task02_moka/traj/w2",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 1,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "working",
+     "sr": 0.4,
+     "source": "gpt-5.4",
+     "iter": 0,
+     "id": "w3",
+     "text": "turn on the stove burner and put the moka pot on the burner",
+     "traj": "tasks/task02_moka/traj/w3",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 1,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "working",
+     "sr": 0.4,
+     "source": "gpt-5.4",
+     "iter": 2,
+     "id": "w4",
+     "text": "turn on the stove burner and place the moka pot over the burner",
+     "traj": "tasks/task02_moka/traj/w4",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 2,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "failing",
+     "score": 7,
+     "rank": 1,
+     "reasoning": "Reliably turned on stove and maintained focus near pan handle with minimal distraction from kettle",
+     "id": "f0",
+     "text": "put the frying pan on the lit burner after turning on the stove, not the white kettle",
+     "traj": "tasks/task02_moka/traj/f0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "failing",
+     "score": 7,
+     "rank": 2,
+     "reasoning": "Reliably turned on stove and stayed near pan handle with reduced kettle distraction",
+     "id": "f1",
+     "text": "turn on the stove and then move the pan handle toward the burner until the frying pan is on the stove, avoiding the white kettle",
+     "traj": "tasks/task02_moka/traj/f1",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "failing",
+     "score": 7,
+     "rank": 3,
+     "reasoning": "Robot turns on burner and performs sustained drag-oriented motion on handle but fails to move pan.",
+     "id": "f2",
+     "text": "turn on the red burner first, then make contact with the frying pan handle and steadily drag the pan onto the burner while avoiding the white kettle",
+     "traj": "tasks/task02_moka/traj/f2",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "failing",
+     "score": 7,
+     "rank": 4,
+     "reasoning": "Robot turns on burner and commits to repeated pull-like contacts with handle but fails to drag pan.",
+     "id": "f3",
+     "text": "after the burner is on, contact the frying pan handle and pull the pan in a straight line onto the glowing red coil while staying clear of the white kettle",
+     "traj": "tasks/task02_moka/traj/f3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    },
+    {
+     "label": "failing",
+     "score": 7,
+     "rank": 5,
+     "reasoning": "Robot reliably turns on burner and makes the clearest push attempt but fails to slide pan onto burner.",
+     "id": "f4",
+     "text": "turn on the red burner first, then move only the frying pan across the stovetop by pushing its handle until the pan is centered on the burner",
+     "traj": "tasks/task02_moka/traj/f4",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "exemplar_matched": true,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/task02_moka/thumb.png"
+  },
+  {
+   "id": "goal_t1",
+   "name": "Put the plate on the stove",
+   "goal": "Put the plate on the stove",
+   "init_sr": 0,
+   "best_sr": 0.8,
+   "scene": "tasks/goal_t1/scene.glb",
+   "geom_index": "tasks/goal_t1/geom_index.json",
+   "cameras": "tasks/goal_t1/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "Put the plate on the stove",
+     "label": "canonical",
+     "traj": "tasks/goal_t1/traj/goal_t1_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 4,
+     "partial": false
+    },
+    {
+     "id": "p1",
+     "text": "Pick up the white plate from the counter with steady motion and set it on the stove burner",
+     "label": "optimized",
+     "traj": "tasks/goal_t1/traj/goal_t1_p1",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 3,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "Pick up the white plate with a steady motion and place it on the stove burner",
+     "label": "optimized",
+     "traj": "tasks/goal_t1/traj/goal_t1_p2",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 6,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "Pick up the white plate carefully and place it on the stove burner",
+     "label": "optimized",
+     "traj": "tasks/goal_t1/traj/goal_t1_p3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 6,
+     "partial": false
+    },
+    {
+     "id": "p4",
+     "text": "Pick up the white plate and set it steadily on the stove burner",
+     "label": "optimized",
+     "traj": "tasks/goal_t1/traj/goal_t1_p4",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 2,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/goal_t1/thumb.png",
+   "view": {
+    "dir": [
+     0.2,
+     1,
+     0.65
+    ],
+    "dist": 1.6
+   }
+  },
+  {
+   "id": "goal_t3",
+   "name": "Open the top layer of the drawer and put the cream cheese inside",
+   "goal": "Open the top layer of the drawer and put the cream cheese inside",
+   "init_sr": 0,
+   "best_sr": 0.4,
+   "scene": "tasks/goal_t3/scene.glb",
+   "geom_index": "tasks/goal_t3/geom_index.json",
+   "cameras": "tasks/goal_t3/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "Open the top layer of the drawer and put the cream cheese inside",
+     "label": "canonical",
+     "traj": "tasks/goal_t3/traj/goal_t3_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p0",
+     "text": "open the top drawer and put the cream cheese container inside",
+     "label": "optimized",
+     "traj": "tasks/goal_t3/traj/goal_t3_p0",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 4,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "first open the top drawer then place the cream cheese inside",
+     "label": "optimized",
+     "traj": "tasks/goal_t3/traj/goal_t3_p2",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 2,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "Open the top drawer and place the cream cheese container inside it",
+     "label": "optimized",
+     "traj": "tasks/goal_t3/traj/goal_t3_p3",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 0,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p4",
+     "text": "Open the top drawer and place the white cream cheese container inside it",
+     "label": "optimized",
+     "traj": "tasks/goal_t3/traj/goal_t3_p4",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 1,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/goal_t3/thumb.png",
+   "view": {
+    "dir": [
+     0.2,
+     1,
+     0.65
+    ],
+    "dist": 1.6
+   }
+  },
+  {
+   "id": "goal_t4",
+   "name": "Put the plate on the top of the drawer",
+   "goal": "Put the plate on the top of the drawer",
+   "init_sr": 0,
+   "best_sr": 0.8,
+   "scene": "tasks/goal_t4/scene.glb",
+   "geom_index": "tasks/goal_t4/geom_index.json",
+   "cameras": "tasks/goal_t4/cameras.json",
+   "prompts": [
+    {
+     "id": "c0",
+     "text": "Put the plate on the top of the drawer",
+     "label": "canonical",
+     "traj": "tasks/goal_t4/traj/goal_t4_c0",
+     "pending": false,
+     "outcome": "fail",
+     "n_success": 1,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p0",
+     "text": "Move the white plate from table to top surface of black drawer",
+     "label": "optimized",
+     "traj": "tasks/goal_t4/traj/goal_t4_p0",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 6,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p1",
+     "text": "Move the white plate from the table to the top surface of the drawer",
+     "label": "optimized",
+     "traj": "tasks/goal_t4/traj/goal_t4_p1",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 5,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p2",
+     "text": "Move the white plate from its current location to the top of the black drawer",
+     "label": "optimized",
+     "traj": "tasks/goal_t4/traj/goal_t4_p2",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 5,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p3",
+     "text": "Move the white plate from the table directly to the top of the black drawer",
+     "label": "optimized",
+     "traj": "tasks/goal_t4/traj/goal_t4_p3",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 5,
+     "n_envs": 8,
+     "partial": false
+    },
+    {
+     "id": "p4",
+     "text": "Move the white plate to the top of the black drawer without touching other objects",
+     "label": "optimized",
+     "traj": "tasks/goal_t4/traj/goal_t4_p4",
+     "pending": false,
+     "outcome": "success",
+     "n_success": 6,
+     "n_envs": 8,
+     "partial": false
+    }
+   ],
+   "thumbnail": "tasks/goal_t4/thumb.png",
+   "view": {
+    "dir": [
+     0.2,
+     1,
+     0.65
+    ],
+    "dist": 1.6
+   }
+  }
+ ]
+}
