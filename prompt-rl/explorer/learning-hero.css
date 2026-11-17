@@ -120,9 +120,10 @@
 .story-label-ppo { fill: #326a9f; }
 .story-point-pde { stroke: #fff; stroke-width: 2px; }
 .story-origin { fill: #326a9f; stroke: #7545b7; stroke-width: 3; }
-.story-curve-preview { opacity: .15; }
+/* Show the full curves immediately; highlight progress alongside the videos. */
+.story-curve-preview { opacity: .5; }
 .story-curve-preview, .story-curve-progress { transition: opacity 280ms ease; }
-.efficiency-story.is-at-start :is(.story-curve-preview, .story-curve-progress) { opacity: 0; }
+.efficiency-story.is-at-start .story-curve-progress { opacity: 0; }
 .story-series { font-size: 19px; font-weight: 700; }
 @media (max-width: 600px) {
   .efficiency-story { padding: 12px; border-radius: 15px; }
