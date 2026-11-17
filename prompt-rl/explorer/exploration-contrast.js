@@ -69,7 +69,10 @@ export class ExplorationContrast{
   try{
    await Promise.all(this.videos.map((v,i)=>new Promise((resolve,reject)=>{const cleanup=()=>{v.removeEventListener('loadeddata',done);v.removeEventListener('error',fail)},done=()=>{cleanup();resolve()},fail=()=>{cleanup();reject(Error('Media failed'))};v.addEventListener('loadeddata',done);v.addEventListener('error',fail);v.poster=`assets/exploration/${i===0?'action-noise':'prompt'}-${index+1}.jpg`;v.src=this.urls[index][i];v.load()})));
    if(generation!==this.generation)return;
-   this.duration=Math.max(...this.videos.map(v=>v.duration));this.ready=true;this.$('.ec-status').textContent='';this.seek(0);
+   // Finish each pair together instead of holding the shorter clip on its last frame.
+   this.duration=Math.min(...this.videos.map(v=>v.duration));
+   this.videos.forEach(v=>{v.playbackRate=PLAYBACK_RATE*v.duration/this.duration});
+   this.ready=true;this.$('.ec-status').textContent='';this.seek(0);
    if(this.visible&&!document.hidden&&!this.userPaused&&(resume||!this.reduce))this.play();
   }catch{if(generation===this.generation)this.$('.ec-status').textContent='The videos could not load. Refresh to try again.'}
  }
@@ -80,8 +83,9 @@ export class ExplorationContrast{
   button.textContent = action;
   button.setAttribute('aria-label', action + ' rollouts');
  }
- seek(t){this.time=Math.max(0,Math.min(this.duration||0,t));this.last=performance.now();this.videos.forEach(v=>{if(v.readyState>=1)v.currentTime=Math.min(this.time,Math.max(0,v.duration-.04));if(this.playing&&this.time<v.duration-.04)v.play().catch(()=>{});else v.pause()});this.updateModes();this.update()}
- play(){if(!this.ready||document.hidden||this.playing||this.finished)return;if(this.time>=this.duration-.05)this.seek(0);this.userPaused=false;this.playing=true;this.last=performance.now();this.videos.forEach(v=>{if(this.time<v.duration-.04)v.play().catch(()=>{})});this.update();this.frame=requestAnimationFrame(()=>this.syncPlayback())}
+ videoTime(video){return Math.min(this.time/(this.duration||1)*video.duration,Math.max(0,video.duration-.04))}
+ seek(t){this.time=Math.max(0,Math.min(this.duration||0,t));this.last=performance.now();this.videos.forEach(v=>{if(v.readyState>=1)v.currentTime=this.videoTime(v);if(this.playing&&this.time<this.duration-.04)v.play().catch(()=>{});else v.pause()});this.updateModes();this.update()}
+ play(){if(!this.ready||document.hidden||this.playing||this.finished)return;if(this.time>=this.duration-.05)this.seek(0);this.userPaused=false;this.playing=true;this.last=performance.now();this.videos.forEach(v=>{if(this.time<this.duration-.04)v.play().catch(()=>{})});this.update();this.frame=requestAnimationFrame(()=>this.syncPlayback())}
  pause(update=true){cancelAnimationFrame(this.frame);this.playing=false;this.videos.forEach(v=>v.pause());if(update)this.update()}
  updateModes(){
   this.modePaths.forEach((paths, side) => {
@@ -98,8 +102,8 @@ export class ExplorationContrast{
   if(!this.ready||!this.playing)return;
   const now=performance.now();this.time=Math.min(this.duration,this.time+(now-this.last)/1000*PLAYBACK_RATE);this.last=now;
   for(const v of this.videos){
-   const target=Math.min(this.time,Math.max(0,v.duration-.04));
-   if(this.time>=v.duration-.04){v.pause();if(Math.abs(v.currentTime-target)>.02)v.currentTime=target;}
+   const target=this.videoTime(v);
+   if(this.time>=this.duration-.04){v.pause();if(Math.abs(v.currentTime-target)>.02)v.currentTime=target;}
    if(Math.abs(v.currentTime-target)>.3)v.currentTime=target;
   }
   this.updateModes();
