@@ -1,4 +1,5 @@
 const ATTEMPT_COUNT = 3;
+const PLAYBACK_RATE = 2;
 const PROMPT_ATTEMPTS = [
  ['put the green container on the bottom rack', 'mode-blue'],
  ['put the green box on the bottom rack', 'mode-purple'],
@@ -9,6 +10,7 @@ export class ExplorationContrast{
  constructor(root){
   this.root=root;this.index=0;this.time=0;this.ready=false;this.playing=false;this.userPaused=false;this.visible=false;this.generation=0;this.reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   this.structure();this.videos=[...root.querySelectorAll('video')];
+  this.videos.forEach(video => { video.defaultPlaybackRate = PLAYBACK_RATE; video.playbackRate = PLAYBACK_RATE; });
   this.modePaths = [...root.closest('.learning-hero').querySelectorAll('.behavior-modes svg')].map(
    diagram => [...diagram.querySelectorAll('.mode-trace')]
   );
@@ -94,7 +96,7 @@ export class ExplorationContrast{
  }
  syncPlayback(){
   if(!this.ready||!this.playing)return;
-  const now=performance.now();this.time=Math.min(this.duration,this.time+(now-this.last)/1000);this.last=now;
+  const now=performance.now();this.time=Math.min(this.duration,this.time+(now-this.last)/1000*PLAYBACK_RATE);this.last=now;
   for(const v of this.videos){
    const target=Math.min(this.time,Math.max(0,v.duration-.04));
    if(this.time>=v.duration-.04){v.pause();if(Math.abs(v.currentTime-target)>.02)v.currentTime=target;}
