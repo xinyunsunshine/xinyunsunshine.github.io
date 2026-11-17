@@ -1,4 +1,4 @@
-import {ExplorationContrast} from './explorer/exploration-contrast.js?v=brief-reward-captions1';
+import {ExplorationContrast} from './explorer/exploration-contrast.js?v=faster-playback2';
 import {BehaviorComparison} from './explorer/behavior-comparison.js?v=all-prompts1';
 import {LiberoRobotViewer} from './explorer/viewer.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
