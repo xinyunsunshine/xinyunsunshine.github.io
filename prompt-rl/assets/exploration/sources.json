@@ -1,0 +1,33 @@
+{
+  "action_noise": {
+    "source": "three_consecutive_fail.mp4",
+    "task": "drawer opening",
+    "edits": "Three side-by-side recordings separated into their original 640 \u00d7 420 panels; original timing preserved."
+  },
+  "prompt_search": {
+    "source": "green_container_prompt_opt.mp4",
+    "task": "green container on bottom rack",
+    "camera_crop": [
+      600,
+      120,
+      1280,
+      720
+    ],
+    "source_frame_intervals": [
+      [
+        0,
+        104
+      ],
+      [
+        104,
+        314
+      ],
+      [
+        314,
+        615
+      ]
+    ],
+    "fps": 30
+  },
+  "processing": "Spatial crops and episode cuts only. No motion interpolation. Source speed annotations are retained."
+}

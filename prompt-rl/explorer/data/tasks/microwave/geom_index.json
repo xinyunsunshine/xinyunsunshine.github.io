@@ -1,0 +1,565 @@
+{
+ "geoms": [
+  {
+   "node": "floor__g0",
+   "geom_id": 0,
+   "geom_name": "floor",
+   "type": 0,
+   "dynamic": false
+  },
+  {
+   "node": "geom_1__g1",
+   "geom_id": 1,
+   "geom_name": "geom_1",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "geom_2__g2",
+   "geom_id": 2,
+   "geom_name": "geom_2",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "geom_3__g3",
+   "geom_id": 3,
+   "geom_name": "geom_3",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "geom_4__g4",
+   "geom_id": 4,
+   "geom_name": "geom_4",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "geom_5__g5",
+   "geom_id": 5,
+   "geom_name": "geom_5",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "wall_left_visual__g6",
+   "geom_id": 6,
+   "geom_name": "wall_left_visual",
+   "type": 6,
+   "dynamic": false
+  },
+  {
+   "node": "wall_right_visual__g7",
+   "geom_id": 7,
+   "geom_name": "wall_right_visual",
+   "type": 6,
+   "dynamic": false
+  },
+  {
+   "node": "wall_rear_visual__g8",
+   "geom_id": 8,
+   "geom_name": "wall_rear_visual",
+   "type": 6,
+   "dynamic": false
+  },
+  {
+   "node": "wall_front_visual__g9",
+   "geom_id": 9,
+   "geom_name": "wall_front_visual",
+   "type": 6,
+   "dynamic": false
+  },
+  {
+   "node": "table_visual__g11",
+   "geom_id": 11,
+   "geom_name": "table_visual",
+   "type": 6,
+   "dynamic": false
+  },
+  {
+   "node": "table_leg1_visual__g12",
+   "geom_id": 12,
+   "geom_name": "table_leg1_visual",
+   "type": 5,
+   "dynamic": false
+  },
+  {
+   "node": "table_leg2_visual__g13",
+   "geom_id": 13,
+   "geom_name": "table_leg2_visual",
+   "type": 5,
+   "dynamic": false
+  },
+  {
+   "node": "table_leg3_visual__g14",
+   "geom_id": 14,
+   "geom_name": "table_leg3_visual",
+   "type": 5,
+   "dynamic": false
+  },
+  {
+   "node": "table_leg4_visual__g15",
+   "geom_id": 15,
+   "geom_name": "table_leg4_visual",
+   "type": 5,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g0_vis__g16",
+   "geom_id": 16,
+   "geom_name": "robot0_g0_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g1_vis__g17",
+   "geom_id": 17,
+   "geom_name": "robot0_g1_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g2_vis__g18",
+   "geom_id": 18,
+   "geom_name": "robot0_g2_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g3_vis__g19",
+   "geom_id": 19,
+   "geom_name": "robot0_g3_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g4_vis__g20",
+   "geom_id": 20,
+   "geom_name": "robot0_g4_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g5_vis__g21",
+   "geom_id": 21,
+   "geom_name": "robot0_g5_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g6_vis__g22",
+   "geom_id": 22,
+   "geom_name": "robot0_g6_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g7_vis__g23",
+   "geom_id": 23,
+   "geom_name": "robot0_g7_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g8_vis__g24",
+   "geom_id": 24,
+   "geom_name": "robot0_g8_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g9_vis__g25",
+   "geom_id": 25,
+   "geom_name": "robot0_g9_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g10_vis__g26",
+   "geom_id": 26,
+   "geom_name": "robot0_g10_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g11_vis__g27",
+   "geom_id": 27,
+   "geom_name": "robot0_g11_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "robot0_g12_vis__g29",
+   "geom_id": 29,
+   "geom_name": "robot0_g12_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g13_vis__g31",
+   "geom_id": 31,
+   "geom_name": "robot0_g13_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g14_vis__g33",
+   "geom_id": 33,
+   "geom_name": "robot0_g14_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g15_vis__g34",
+   "geom_id": 34,
+   "geom_name": "robot0_g15_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g16_vis__g35",
+   "geom_id": 35,
+   "geom_name": "robot0_g16_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g17_vis__g36",
+   "geom_id": 36,
+   "geom_name": "robot0_g17_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g18_vis__g38",
+   "geom_id": 38,
+   "geom_name": "robot0_g18_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g19_vis__g39",
+   "geom_id": 39,
+   "geom_name": "robot0_g19_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g20_vis__g40",
+   "geom_id": 40,
+   "geom_name": "robot0_g20_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g21_vis__g41",
+   "geom_id": 41,
+   "geom_name": "robot0_g21_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g22_vis__g43",
+   "geom_id": 43,
+   "geom_name": "robot0_g22_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g23_vis__g44",
+   "geom_id": 44,
+   "geom_name": "robot0_g23_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g24_vis__g45",
+   "geom_id": 45,
+   "geom_name": "robot0_g24_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g25_vis__g47",
+   "geom_id": 47,
+   "geom_name": "robot0_g25_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g26_vis__g48",
+   "geom_id": 48,
+   "geom_name": "robot0_g26_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g27_vis__g49",
+   "geom_id": 49,
+   "geom_name": "robot0_g27_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g28_vis__g50",
+   "geom_id": 50,
+   "geom_name": "robot0_g28_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g29_vis__g51",
+   "geom_id": 51,
+   "geom_name": "robot0_g29_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g30_vis__g52",
+   "geom_id": 52,
+   "geom_name": "robot0_g30_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g31_vis__g53",
+   "geom_id": 53,
+   "geom_name": "robot0_g31_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g32_vis__g54",
+   "geom_id": 54,
+   "geom_name": "robot0_g32_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g33_vis__g55",
+   "geom_id": 55,
+   "geom_name": "robot0_g33_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g34_vis__g56",
+   "geom_id": 56,
+   "geom_name": "robot0_g34_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g35_vis__g57",
+   "geom_id": 57,
+   "geom_name": "robot0_g35_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g36_vis__g58",
+   "geom_id": 58,
+   "geom_name": "robot0_g36_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g37_vis__g59",
+   "geom_id": 59,
+   "geom_name": "robot0_g37_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g38_vis__g60",
+   "geom_id": 60,
+   "geom_name": "robot0_g38_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g39_vis__g61",
+   "geom_id": 61,
+   "geom_name": "robot0_g39_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g40_vis__g62",
+   "geom_id": 62,
+   "geom_name": "robot0_g40_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g41_vis__g63",
+   "geom_id": 63,
+   "geom_name": "robot0_g41_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g42_vis__g65",
+   "geom_id": 65,
+   "geom_name": "robot0_g42_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g43_vis__g66",
+   "geom_id": 66,
+   "geom_name": "robot0_g43_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g44_vis__g67",
+   "geom_id": 67,
+   "geom_name": "robot0_g44_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g45_vis__g68",
+   "geom_id": 68,
+   "geom_name": "robot0_g45_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g46_vis__g69",
+   "geom_id": 69,
+   "geom_name": "robot0_g46_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g47_vis__g70",
+   "geom_id": 70,
+   "geom_name": "robot0_g47_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g48_vis__g71",
+   "geom_id": 71,
+   "geom_name": "robot0_g48_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "robot0_g49_vis__g72",
+   "geom_id": 72,
+   "geom_name": "robot0_g49_vis",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "gripper0_hand_visual__g74",
+   "geom_id": 74,
+   "geom_name": "gripper0_hand_visual",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "gripper0_finger1_visual__g76",
+   "geom_id": 76,
+   "geom_name": "gripper0_finger1_visual",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "gripper0_finger2_visual__g79",
+   "geom_id": 79,
+   "geom_name": "gripper0_finger2_visual",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "mount0_torso_vis__g84",
+   "geom_id": 84,
+   "geom_name": "mount0_torso_vis",
+   "type": 6,
+   "dynamic": false
+  },
+  {
+   "node": "mount0_pedestal_vis__g85",
+   "geom_id": 85,
+   "geom_name": "mount0_pedestal_vis",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "porcelain_mug_1_g0__g87",
+   "geom_id": 87,
+   "geom_name": "porcelain_mug_1_g0",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "white_yellow_mug_1_g0__g110",
+   "geom_id": 110,
+   "geom_name": "white_yellow_mug_1_g0",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "microwave_1_g0__g150",
+   "geom_id": 150,
+   "geom_name": "microwave_1_g0",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "microwave_1_g1__g151",
+   "geom_id": 151,
+   "geom_name": "microwave_1_g1",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "microwave_1_g2__g152",
+   "geom_id": 152,
+   "geom_name": "microwave_1_g2",
+   "type": 7,
+   "dynamic": false
+  },
+  {
+   "node": "microwave_1_g9__g159",
+   "geom_id": 159,
+   "geom_name": "microwave_1_g9",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "microwave_1_g10__g160",
+   "geom_id": 160,
+   "geom_name": "microwave_1_g10",
+   "type": 7,
+   "dynamic": true
+  },
+  {
+   "node": "microwave_1_g11__g161",
+   "geom_id": 161,
+   "geom_name": "microwave_1_g11",
+   "type": 3,
+   "dynamic": true
+  },
+  {
+   "node": "microwave_1_g12__g162",
+   "geom_id": 162,
+   "geom_name": "microwave_1_g12",
+   "type": 3,
+   "dynamic": true
+  },
+  {
+   "node": "microwave_1_g13__g163",
+   "geom_id": 163,
+   "geom_name": "microwave_1_g13",
+   "type": 3,
+   "dynamic": true
+  }
+ ],
+ "n_dynamic": 48
+}
